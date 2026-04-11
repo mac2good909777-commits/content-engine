@@ -1258,15 +1258,15 @@
     }
 
     function renderDashboard() {
-      renderHeader();
-      renderKPI();
-      renderWorkflow();
-      renderSearchStrategy();
-      renderRoles();
-      renderCandidates();
-      renderArticles();
-      renderControlLog();
-      initKeywordInput();
+      try { renderHeader(); } catch(e) { console.error('renderHeader:', e); }
+      try { renderKPI(); } catch(e) { console.error('renderKPI:', e); }
+      try { renderWorkflow(); } catch(e) { console.error('renderWorkflow:', e); }
+      try { renderSearchStrategy(); } catch(e) { console.error('renderSearchStrategy:', e); }
+      try { renderRoles(); } catch(e) { console.error('renderRoles:', e); }
+      try { renderCandidates(); } catch(e) { console.error('renderCandidates:', e); }
+      try { renderArticles(); } catch(e) { console.error('renderArticles:', e); }
+      try { renderControlLog(); } catch(e) { console.error('renderControlLog:', e); }
+      try { initKeywordInput(); } catch(e) { console.error('initKeywordInput:', e); }
     }
 
     function renderHeader() {
