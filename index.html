@@ -140,6 +140,20 @@
       text-align: center;
     }
 
+    .kpi-card.editable { cursor: pointer; transition: border-color 0.2s; }
+    .kpi-card.editable:hover { border-color: var(--blue-bright); }
+    .kpi-card.auto { position: relative; }
+    .kpi-card.auto::after {
+      content: 'AUTO';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 8px;
+      letter-spacing: 1px;
+      color: var(--green-up);
+      opacity: 0.6;
+    }
+
     .kpi-number {
       font-family: 'JetBrains Mono', 'Courier New', monospace;
       font-size: 32px;
@@ -153,6 +167,30 @@
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--text-muted);
+    }
+
+    .kpi-edit-hint {
+      font-size: 9px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+
+    .kpi-card.editable:hover .kpi-edit-hint { opacity: 1; }
+
+    .kpi-inline-input {
+      background: var(--bg-page);
+      border: 1px solid var(--blue-bright);
+      border-radius: 4px;
+      color: var(--blue-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      width: 80px;
+      padding: 4px;
+      outline: none;
     }
 
     /* ─── Workflow Section ─── */
@@ -782,6 +820,14 @@
       font-weight: 600;
       text-transform: uppercase;
     }
+    .status-badge.clickable {
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .status-badge.clickable:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 8px rgba(96,165,250,0.3);
+    }
 
     .status-badge.draft {
       background-color: rgba(100, 116, 139, 0.2);
@@ -1039,21 +1085,23 @@
 
     <!-- KPI Cards -->
     <div class="kpi-row">
-      <div class="kpi-card">
+      <div class="kpi-card auto">
         <div class="kpi-number"><span id="totalArticlesNum">0</span>/<span id="targetArticlesNum">0</span></div>
         <div class="kpi-label">已發布文章</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card auto">
         <div class="kpi-number" id="consecutiveWeeksNum">0</div>
         <div class="kpi-label">連續產出週數</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card editable" onclick="editKPI('inquiries')">
         <div class="kpi-number" id="inquiriesNum">0</div>
         <div class="kpi-label">諮詢/互動</div>
+        <div class="kpi-edit-hint">點擊編輯</div>
       </div>
-      <div class="kpi-card">
+      <div class="kpi-card editable" onclick="editKPI('partnerInteractions')">
         <div class="kpi-number" id="partnerInteractionsNum">0</div>
         <div class="kpi-label">同業互動</div>
+        <div class="kpi-edit-hint">點擊編輯</div>
       </div>
     </div>
 
@@ -1286,12 +1334,62 @@
     }
 
     function renderKPI() {
-      const { kpi } = dashboardData;
-      document.getElementById('totalArticlesNum').textContent = kpi.totalArticles || '0';
-      document.getElementById('targetArticlesNum').textContent = kpi.targetArticles || '0';
-      document.getElementById('consecutiveWeeksNum').textContent = kpi.consecutiveWeeks || '0';
+      const { kpi, articles } = dashboardData;
+
+      // Auto-calculate: published articles count
+      const publishedCount = (articles || []).filter(a => a.status === 'published').length;
+      kpi.totalArticles = publishedCount;
+
+      // Auto-calculate: consecutive weeks with output
+      kpi.consecutiveWeeks = calcConsecutiveWeeks(articles || []);
+
+      document.getElementById('totalArticlesNum').textContent = kpi.totalArticles;
+      document.getElementById('targetArticlesNum').textContent = kpi.targetArticles || '8';
+      document.getElementById('consecutiveWeeksNum').textContent = kpi.consecutiveWeeks;
       document.getElementById('inquiriesNum').textContent = kpi.inquiries || '0';
       document.getElementById('partnerInteractionsNum').textContent = kpi.partnerInteractions || '0';
+    }
+
+    function calcConsecutiveWeeks(articles) {
+      const published = articles.filter(a => a.status === 'published' && a.publishDate);
+      if (published.length === 0) return 0;
+      // Get unique weeks with published articles
+      const weeks = new Set(published.map(a => {
+        const d = new Date(a.publishDate);
+        const startOfYear = new Date(d.getFullYear(), 0, 1);
+        return Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+      }));
+      // Count backwards from latest week
+      const sorted = [...weeks].sort((a, b) => b - a);
+      let count = 1;
+      for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i] === sorted[i - 1] - 1) count++;
+        else break;
+      }
+      return count;
+    }
+
+    function editKPI(field) {
+      const el = document.getElementById(field === 'inquiries' ? 'inquiriesNum' : 'partnerInteractionsNum');
+      const current = parseInt(el.textContent) || 0;
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.value = current;
+      input.className = 'kpi-inline-input';
+      input.min = 0;
+      el.innerHTML = '';
+      el.appendChild(input);
+      input.focus();
+      input.select();
+
+      function save() {
+        const val = Math.max(0, parseInt(input.value) || 0);
+        dashboardData.kpi[field] = val;
+        el.textContent = val;
+        saveDataJson();
+      }
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); save(); } });
     }
 
     function renderWorkflow() {
@@ -1446,6 +1544,8 @@
         return;
       }
 
+      const statusClass = s => s === 'published' ? 'published' : s === 'review' ? 'review' : 'draft';
+
       const table = document.createElement('table');
       table.innerHTML = `
         <thead>
@@ -1459,20 +1559,39 @@
           </tr>
         </thead>
         <tbody>
-          ${articles.map(a => `
+          ${articles.map((a, i) => `
             <tr>
               <td>${escapeHtml(a.title)}</td>
               <td>${formatDate(a.publishDate || a.createdDate)}</td>
               <td><span class="theme-badge">${escapeHtml(a.theme)}</span></td>
               <td>${escapeHtml(a.channel || a.biweekAxis || '--')}</td>
               <td>${a.views || '0'}</td>
-              <td><span class="status-badge ${a.status === 'published' ? 'published' : a.status === 'draft' ? 'review' : 'draft'}">${escapeHtml(a.status)}</span></td>
+              <td><span class="status-badge clickable ${statusClass(a.status)}" onclick="cycleArticleStatus(${i})" title="點擊切換狀態">${escapeHtml(a.status)}</span></td>
             </tr>
           `).join('')}
         </tbody>
       `;
       container.innerHTML = '';
       container.appendChild(table);
+    }
+
+    function cycleArticleStatus(index) {
+      const cycle = ['draft', 'review', 'published'];
+      const article = dashboardData.articles[index];
+      const curr = cycle.indexOf(article.status);
+      article.status = cycle[(curr + 1) % cycle.length];
+      // Auto-fill publishDate when set to published
+      if (article.status === 'published' && !article.publishDate) {
+        article.publishDate = new Date().toISOString().slice(0, 10);
+      }
+      // Clear publishDate if reverted from published
+      if (article.status !== 'published') {
+        article.publishDate = '';
+      }
+      renderArticles();
+      renderKPI();
+      saveDataJson();
+      showToast(`「${article.title}」→ ${article.status}`);
     }
 
     function renderControlLog() {
