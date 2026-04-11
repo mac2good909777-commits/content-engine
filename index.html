@@ -1374,7 +1374,7 @@
 
       // Create filter buttons
       filterContainer.innerHTML = '';
-      const themes = new Set(candidates.map(c => c.theme).filter(t => t));
+      const themes = new Set(candidates.map(c => c.pool || c.theme).filter(t => t));
       const allBtn = document.createElement('button');
       allBtn.className = 'filter-btn active';
       allBtn.textContent = 'All';
@@ -1392,7 +1392,7 @@
         btn.onclick = () => {
           document.querySelectorAll('#themeFilters .filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          const filtered = candidates.filter(c => c.theme === theme);
+          const filtered = candidates.filter(c => (c.pool || c.theme) === theme);
           renderCandidatesTable(filtered);
         };
         filterContainer.appendChild(btn);
@@ -1424,10 +1424,10 @@
           ${candidates.map(c => `
             <tr>
               <td>${escapeHtml(c.title)}</td>
-              <td>${escapeHtml(c.source)}</td>
-              <td><span class="theme-badge">${escapeHtml(c.theme)}</span></td>
-              <td>${escapeHtml(c.priority)}</td>
-              <td><span class="status-badge ${c.status.toLowerCase()}">${escapeHtml(c.status)}</span></td>
+              <td style="max-width:200px;font-size:11px;">${escapeHtml(c.source)}</td>
+              <td><span class="theme-badge">${escapeHtml(c.pool || c.theme)}</span></td>
+              <td><span class="status-badge ${c.priority === 'high' ? 'review' : 'draft'}">${escapeHtml(c.priority)}</span></td>
+              <td><span class="status-badge ${c.status === 'drafted' ? 'published' : c.status === 'selected' ? 'review' : 'draft'}">${escapeHtml(c.status)}</span></td>
               <td>${formatDate(c.addedDate)}</td>
             </tr>
           `).join('')}
@@ -1462,11 +1462,11 @@
           ${articles.map(a => `
             <tr>
               <td>${escapeHtml(a.title)}</td>
-              <td>${formatDate(a.publishDate)}</td>
+              <td>${formatDate(a.publishDate || a.createdDate)}</td>
               <td><span class="theme-badge">${escapeHtml(a.theme)}</span></td>
-              <td>${escapeHtml(a.channel)}</td>
+              <td>${escapeHtml(a.channel || a.biweekAxis || '--')}</td>
               <td>${a.views || '0'}</td>
-              <td><span class="status-badge published">${escapeHtml(a.status)}</span></td>
+              <td><span class="status-badge ${a.status === 'published' ? 'published' : a.status === 'draft' ? 'review' : 'draft'}">${escapeHtml(a.status)}</span></td>
             </tr>
           `).join('')}
         </tbody>
