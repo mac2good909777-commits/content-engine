@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>張丙公派系表（丙派）── 麗水港（龍井）</title>
+<style>
+:root {
+  --bg:#FDFBF5; --card:#fff; --border:#D4C5A9; --text:#2C2C2C; --muted:#888;
+  --accent:#4A6741; --accent2:#8B6914; --highlight:#FFF3CD;
+  --gen13:#6B2D2D; --gen14:#8B3A3A; --gen15:#A0522D; --gen16:#2E6B4F;
+  --gen17:#3A6B8C; --gen18:#5B4FA0; --gen19:#A0306B; --gen20:#C06B20;
+  --gen21:#1B7A7A; --gen22:#4A6B30;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Serif TC","Source Han Serif TC","PMingLiU",serif;background:var(--bg);color:var(--text);line-height:1.7}
+
+/* ── Header ── */
+.header{text-align:center;padding:32px 20px 20px;border-bottom:2px solid var(--border);background:linear-gradient(180deg,#F5F0E1 0%,var(--bg) 100%)}
+.header h1{font-size:30px;letter-spacing:6px;color:var(--accent);margin-bottom:6px}
+.header .sub{font-size:15px;color:var(--muted);letter-spacing:2px}
+.header .origin{font-size:13px;color:#999;margin-top:4px}
+
+/* ── Status bar ── */
+.status-bar{text-align:center;padding:8px;font-size:12px;color:var(--muted);background:#F9F5EB;border-bottom:1px solid #EDE5D0}
+.status-bar .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.dot.ok{background:#27AE60} .dot.err{background:#E74C3C} .dot.loading{background:#F39C12;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:12px 16px;border-bottom:1px solid #EDE5D0}
+.toolbar input{padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;width:220px;font-family:inherit;outline:none}
+.toolbar input:focus{border-color:var(--accent)}
+.btn{padding:5px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;font-family:inherit;transition:.15s}
+.btn:hover{background:#EDE5D0}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:#3A5731}
+
+/* ── Legend ── */
+.legend{display:none;flex-wrap:wrap;gap:6px;justify-content:center;padding:8px 16px}
+.legend.show{display:flex}
+.legend span{font-size:11px;padding:2px 10px;border-radius:10px;color:#fff}
+
+/* ── Stats ── */
+.stats-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px;font-size:13px;color:var(--muted)}
+.stats-row b{color:var(--text)}
+
+/* ── Tree ── */
+.tree-wrap{padding:16px 20px 60px;max-width:1200px;margin:0 auto}
+.tree ul{list-style:none;padding-left:28px;border-left:2px solid #E8E0D0}
+.tree>ul{border-left:none;padding-left:0}
+.tree li{position:relative;padding:3px 0}
+.tree li::before{content:"";position:absolute;left:-28px;top:16px;width:24px;border-top:2px solid #E8E0D0}
+.tree>ul>li::before{display:none}
+
+/* ── Node card ── */
+.node{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:8px;background:var(--card);border:1px solid #E8E0D0;cursor:pointer;transition:.15s;max-width:100%;flex-wrap:wrap}
+.node:hover{box-shadow:0 2px 10px rgba(0,0,0,.08);border-color:var(--accent)}
+.node.highlighted{background:var(--highlight);border-color:#D4A017}
+.node .gen{font-size:10px;padding:1px 7px;border-radius:10px;color:#fff;font-weight:600;white-space:nowrap}
+.node .name{font-size:17px;font-weight:700;letter-spacing:2px}
+.node .spouse-tag{color:#8E44AD;font-size:12px}
+.node .note-tag{font-size:10px;background:#F0EAD6;padding:1px 6px;border-radius:4px;color:#8B7355}
+.node .status-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:600}
+.status-tag.alive{background:#E8F5E9;color:#2E7D32}
+.status-tag.deceased{background:#F3E5F5;color:#6A1B9A}
+.node .info-tag{font-size:11px;color:#666}
+.node .uncertain{color:#C0392B;font-size:11px;cursor:help}
+.node .gender-icon{font-size:13px;margin-left:-2px}
+.node .gender-icon.male{color:#3A6B8C}
+.node .gender-icon.female{color:#C0507E}
+.node .order-tag{font-size:9px;padding:0 5px;border-radius:8px;background:#E8E0D0;color:#6B5B3E;font-weight:600;letter-spacing:1px}
+.toggle-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;font-size:14px;font-weight:bold;border:1px solid #bbb;border-radius:4px;background:#F9F5EB;cursor:pointer;user-select:none;flex-shrink:0;color:#4A6741;transition:.15s}
+.toggle-btn:hover{background:#E8DCC8;border-color:#4A6741}
+.collapsed>.node .toggle-btn::after{content:"+"}
+.expanded>.node .toggle-btn::after{content:"−"}
+.collapsed>ul{display:none}
+.tree li>ul{overflow:hidden;transition:max-height .4s ease,opacity .3s ease}
+.tree li.expanding>ul{animation:revealBranch .4s ease forwards}
+@keyframes revealBranch{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Descendant hint badge ── */
+.desc-hint{display:inline-block;font-size:10px;padding:1px 8px;border-radius:10px;background:#F0EAD6;color:#8B7355;margin-left:4px;cursor:pointer;transition:.2s;vertical-align:middle}
+.desc-hint:hover{background:#E0D4B8;color:#5D4037}
+
+/* ── Welcome overlay ── */
+.welcome-overlay{position:fixed;inset:0;background:rgba(253,251,245,0.98);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:1;transition:opacity .6s ease}
+.welcome-overlay.hide{opacity:0;pointer-events:none}
+.welcome-box{text-align:center;padding:40px;max-width:480px}
+.welcome-box h2{font-size:28px;color:var(--accent);letter-spacing:6px;margin-bottom:12px}
+.welcome-box p{font-size:15px;color:#666;line-height:1.8;margin-bottom:24px}
+.welcome-box .start-btn{padding:12px 36px;font-size:16px;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit;letter-spacing:2px;transition:.2s}
+.welcome-box .start-btn:hover{background:#3A5731;transform:scale(1.03)}
+.welcome-box .tree-icon{font-size:60px;margin-bottom:16px;display:block}
+
+/* ── Detail panel ── */
+.panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100}
+.panel-overlay.show{display:block}
+.panel{position:fixed;right:0;top:0;bottom:0;width:380px;max-width:90vw;background:var(--card);box-shadow:-4px 0 20px rgba(0,0,0,.15);z-index:101;overflow-y:auto;padding:24px;transform:translateX(100%);transition:transform .25s}
+.panel.show{transform:translateX(0)}
+.panel h2{font-size:22px;letter-spacing:3px;margin-bottom:4px}
+.panel .gen-line{font-size:13px;color:var(--muted);margin-bottom:16px}
+.panel .field{margin-bottom:14px}
+.panel .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
+.panel .field .val{font-size:15px;min-height:22px}
+.panel .field .val.empty{color:#ccc;font-style:italic;font-size:13px}
+.panel .close-btn{position:absolute;top:12px;right:16px;font-size:22px;cursor:pointer;color:#999;background:none;border:none}
+.panel .id-line{font-size:11px;color:#bbb;margin-top:16px;word-break:break-all}
+.panel .children-list{margin-top:12px}
+.panel .children-list h4{font-size:13px;color:var(--muted);margin-bottom:6px}
+.panel .child-chip{display:inline-block;padding:2px 10px;margin:2px;border-radius:12px;font-size:12px;background:#F0EAD6;cursor:pointer}
+.panel .child-chip:hover{background:#E0D4B8}
+
+/* ── Config modal ── */
+.config-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.4);align-items:center;justify-content:center}
+.config-modal.show{display:flex}
+.config-box{background:var(--card);border-radius:12px;padding:28px;max-width:520px;width:90%;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.config-box h3{margin-bottom:12px;font-size:18px}
+.config-box p{font-size:13px;color:#666;margin-bottom:10px;line-height:1.6}
+.config-box input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;margin-bottom:12px;font-family:inherit}
+.config-box code{background:#F0EAD6;padding:2px 6px;border-radius:3px;font-size:12px}
+.config-box ol{padding-left:20px;font-size:13px;color:#666;margin:10px 0}
+.config-box ol li{margin-bottom:6px}
+
+/* ── Ancestry block ── */
+.ancestry-block{max-width:1200px;margin:0 auto;padding:0 20px}
+.ancestry-toggle{display:flex;align-items:center;gap:8px;padding:12px 0;cursor:pointer;user-select:none;border:none;background:none;font-family:inherit;font-size:14px;color:var(--accent);font-weight:600}
+.ancestry-toggle:hover{color:#3A5731}
+.ancestry-toggle .arrow{transition:transform .2s;font-size:12px}
+.ancestry-toggle .arrow.open{transform:rotate(90deg)}
+.ancestry-content{display:none;padding:0 0 16px}
+.ancestry-content.show{display:block}
+.ancestry-card{background:linear-gradient(135deg,#F9F5EB 0%,#FFF8E7 100%);border:1px solid var(--border);border-radius:12px;padding:20px 24px;line-height:2}
+.ancestry-card h3{font-size:16px;color:var(--accent);margin-bottom:10px;letter-spacing:2px}
+.ancestry-card .origin-line{font-size:14px;color:var(--text);margin-bottom:6px}
+.ancestry-card .origin-line b{color:var(--accent2)}
+.ancestry-card .origin-note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7;border-top:1px solid #E8E0D0;padding-top:8px}
+.ancestry-card .migration-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.ancestry-card .migration-table th{background:var(--accent);color:#fff;padding:6px 10px;text-align:left;font-weight:600;font-size:12px}
+.ancestry-card .migration-table td{padding:5px 10px;border-bottom:1px solid #E8E0D0}
+.ancestry-card .migration-table tr:hover td{background:#F5F0E1}
+
+/* ── View Tabs ── */
+.view-tabs{display:flex;justify-content:center;gap:0;padding:0 16px;border-bottom:1px solid #EDE5D0}
+.view-tab{padding:10px 24px;font-size:14px;font-family:inherit;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;transition:.15s}
+.view-tab:hover{color:var(--text)}
+.view-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+/* ── Gen Stats Panel ── */
+.gen-stats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px 16px;background:#F9F5EB;border-bottom:1px solid #EDE5D0}
+.gen-chip{padding:5px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:2px solid transparent;background:var(--card);transition:.15s;display:flex;align-items:center;gap:6px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.gen-chip:hover{border-color:var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.gen-chip.active{border-color:var(--accent);background:#E8F0E4;font-weight:600}
+.gen-chip .gen-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.gen-chip .gen-count{font-weight:700;color:var(--accent)}
+
+/* ── List View ── */
+.list-view{display:none;max-width:1200px;margin:0 auto;padding:16px 20px 60px}
+.list-view.show{display:block}
+.list-gen-section{margin-bottom:24px}
+.list-gen-header{display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:8px;margin-bottom:8px;cursor:pointer;user-select:none}
+.list-gen-header:hover{filter:brightness(0.95)}
+.list-gen-header h3{font-size:16px;color:#fff;margin:0;letter-spacing:2px}
+.list-gen-header .count-badge{background:rgba(255,255,255,.3);color:#fff;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.list-gen-header .relation-hint{margin-left:auto;color:rgba(255,255,255,.7);font-size:12px}
+.list-gen-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;padding:0 4px}
+.list-gen-body.collapsed{display:none}
+.list-card{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;background:var(--card);border:1px solid #E8E0D0;cursor:pointer;transition:.15s}
+.list-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08);border-color:var(--accent)}
+.list-card .card-order{font-size:20px;font-weight:700;color:#ccc;min-width:28px;text-align:center}
+.list-card .card-name{font-size:16px;font-weight:700;letter-spacing:1px}
+.list-card .card-meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.list-card .card-meta span{background:#F5F0E1;padding:1px 6px;border-radius:4px}
+.list-card .card-gender{font-size:14px}
+.list-card .card-gender.male{color:#3A6B8C}
+.list-card .card-gender.female{color:#C0507E}
+
+/* ── Footer ── */
+footer{text-align:center;padding:20px;font-size:12px;color:#bbb;border-top:1px solid #EDE5D0}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .header h1{font-size:22px;letter-spacing:3px}
+  .toolbar{gap:6px}
+  .toolbar input{width:160px}
+  .tree-wrap{padding:10px}
+  .tree ul{padding-left:18px}
+  .tree li::before{left:-18px;width:14px}
+  .node .name{font-size:15px}
+  .panel{width:100%;max-width:100%}
+  .gen-stats{gap:6px;padding:8px 10px}
+  .gen-chip{padding:4px 10px;font-size:12px}
+  .list-gen-body{grid-template-columns:1fr}
+  .view-tab{padding:8px 14px;font-size:13px}
+}
+@media print{
+  .toolbar,.status-bar,.edit-hint,.config-modal,.panel-overlay,.panel,.gen-stats,.view-tabs{display:none!important}
+  .collapsed>ul{display:block!important}
+  .tree-wrap{padding:0}
+}
+</style>
+</head>
+<body>
+
+<!-- Welcome overlay -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-box">
+    <span class="tree-icon">🌳</span>
+    <h2>張丙公族譜</h2>
+    <p>
+      清嘉慶年間，張丙公自福建漳浦古致丹山渡海來台，<br>
+      落腳麗水港（今台中龍井），開枝散葉至今。<br><br>
+      點開每一個名字，探索家族的故事。
+    </p>
+    <button class="start-btn" onclick="startExplore()">開始探索</button>
+  </div>
+</div>
+
+<div class="header">
+  <h1>張丙公派系表</h1>
+  <div class="sub">丙派 ── 麗水港（龍井）</div>
+  <div class="origin">祖籍：福建省漳州府漳浦縣眉田巷人家社杏仔腳</div>
+</div>
+
+<div style="background:#FFF8E1;border:1px solid #F0E0A0;border-radius:8px;padding:12px 16px;margin:12px auto;max-width:900px;font-size:14px;line-height:1.7;color:#5D4037;">
+  📋 本族譜資料由 AI 辨識老族譜翻拍照片建立，可能有錯字或缺漏；過去紙本也只記錄男性，女性家人幾乎空白。歡迎透過「📝 我要填寫資料」協助校對、補充，也把母親、姊妹、女兒加進來，讓家族脈絡更完整。
+</div>
+
+<div class="status-bar" id="statusBar">
+  <span class="dot loading"></span> 載入中…
+</div>
+
+<div class="toolbar">
+  <input type="text" id="searchInput" placeholder="搜尋姓名…" oninput="searchTree(this.value)">
+  <button class="btn" onclick="expandAll()">全部展開</button>
+  <button class="btn" onclick="collapseAll()">全部收合</button>
+  <button class="btn" onclick="toggleLegend()">世代圖例</button>
+  <a href="form.html" class="btn" style="background:#8B6914;color:#fff;border-color:#8B6914;text-decoration:none">📝 我要填寫資料</a>
+</div>
+
+<div class="legend" id="legend">
+  <span style="background:var(--gen13)">十三世</span>
+  <span style="background:var(--gen14)">十四世</span>
+  <span style="background:var(--gen15)">十五世</span>
+  <span style="background:var(--gen16)">十六世</span>
+  <span style="background:var(--gen17)">十七世</span>
+  <span style="background:var(--gen18)">十八世</span>
+  <span style="background:var(--gen19)">十九世</span>
+  <span style="background:var(--gen20)">二十世</span>
+  <span style="background:var(--gen21)">二十一世</span>
+  <span style="background:var(--gen22)">二十二世</span>
+</div>
+
+<div class="stats-row" id="statsRow"></div>
+
+<div class="ancestry-block">
+  <button class="ancestry-toggle" onclick="toggleAncestry()">
+    <span class="arrow" id="ancestryArrow">▶</span> 📜 祖源脈絡（張丙公以上）
+  </button>
+  <div class="ancestry-content" id="ancestryContent">
+    <div class="ancestry-card">
+      <h3>📜 從金門到丹山，從丹山到台灣 ── 張氏遷台史</h3>
+
+      <div class="origin-line" style="font-weight:600;color:var(--accent);">▎ 祖籍源流</div>
+      <div class="origin-line">
+        本族源流，上可追溯至<b>金門青嶼張氏</b>。依現存青嶼碑刻《青嶼張氏忠勤世澤世系源流考》及相關族譜文獻整理，本族主要遷徙脈絡為：
+      </div>
+      <div class="origin-line" style="text-align:center;font-size:1.05em;letter-spacing:1px;margin:8px 0;">
+        <b>金門青嶼</b>（均正公，青嶼開基祖）→ 苦竹 → <b>福建省漳州府漳浦縣古致丹山</b> → <b>台灣</b>
+      </div>
+      <div class="origin-line">
+        青嶼張氏後裔分衍為<b>五大房</b>，分別為：張朝輔（元導）、張朝奎（元善）、張朝敬（元良）、張朝永（元祿）、張朝修（元齊）。本族丹山一脈，即承接其中<b>三房朝敬公</b>支系而下。堂號為：<b>重恩堂</b>（清河衍派）。
+      </div>
+
+      <div class="origin-line" style="margin-top:16px;font-weight:600;color:var(--accent);">▎ 青嶼張氏與「忠勤世澤」</div>
+      <div class="origin-line">
+        金門青嶼現存碑刻題有《青嶼張氏忠勤世澤世系源流考》，其中「忠勤世澤」並非一般修辭，而是青嶼張氏家族歷史榮耀的象徵。地方文史資料記載，青嶼張氏於明代曾出顯赫人物，尤以<b>張敏、張本、張慶</b>三兄弟最著名，其中<b>張敏公</b>封為<b>忠勤公</b>，後世遂以「忠勤」作為家聲標誌。
+      </div>
+      <div class="origin-line" style="font-size:0.92em;color:#666;">
+        因此，青嶼張氏不僅重視血脈傳承，也重視祖先在德行、仕宦與家聲上的歷史榮耀。
+      </div>
+
+      <div class="origin-line" style="margin-top:16px;font-weight:600;color:var(--accent);">▎ 丹山源流重要世系</div>
+      <div class="origin-line" style="font-size:0.92em;color:#666;margin-bottom:4px;">
+        本族丹山一脈，承自金門青嶼三房朝敬公。依現存文獻整理，重要世系如下：
+      </div>
+      <div class="origin-line">
+        <b>第1世 張朝敬</b>（全國125世）── 金門青嶼張氏五大房之一，為丹山一脈上游重要祖先。
+      </div>
+      <div class="origin-line">
+        <b>第2世 張能治</b>（全國126世）── 朝敬公三子，居苦竹。
+      </div>
+      <div class="origin-line">
+        <b>第5世 張惠直</b>（全國129世）── 自苦竹分居<b>古致丹山</b>，為丹山一脈之始。
+      </div>
+      <div class="origin-line">
+        <b>第8世 觀養公</b>（全國132世）── 相傳為丹山家譜早期撰寫者之一。
+      </div>
+      <div class="origin-line">
+        <b>第14世 張若化</b>（全國138世，1599–1684）── 字雨玉，號蒼岑，崇禎丙子科舉人，授江西道監察御史。
+      </div>
+      <div class="origin-line" style="padding-left:16px;">
+        <b>張若仲</b>（1612–1695）── 若化公之弟，字聲玉，號次岑，崇禎年間中舉並成進士，為丹山張氏重要先賢。
+      </div>
+
+      <div class="origin-line" style="margin-top:16px;font-weight:600;color:var(--accent);">▎ 張丙公渡台</div>
+      <div class="origin-line">
+        <b>第20世 張丙</b>（全國144世，部分文獻記載作「<b>張炳</b>」）── 丹山族譜記載：「丙嘉慶年間往台」。張丙公自<b>福建省漳州府漳浦縣古致丹山</b>渡海遷往台灣，定居於<b>水裡港</b>（今<b>台中市龍井區麗水</b>一帶），為本派在台開基祖。
+      </div>
+      <div class="origin-line">
+        張丙公育有四子，約於<b>1820～1825年間</b>陸續遷台，成為本族在台發展的重要起點。
+      </div>
+
+      <div class="origin-line" style="margin-top:16px;font-weight:600;color:var(--accent);">▎ 本族遷徙主線</div>
+      <div class="origin-line">
+        綜合碑刻與族譜文獻，本族主要遷徙路徑可整理如下：
+      </div>
+      <div class="origin-line" style="text-align:center;font-size:1.05em;letter-spacing:1px;margin:8px 0;">
+        <b>金門青嶼</b> → 苦竹 → <b>福建漳浦古致丹山</b> → <b>台灣水裡港</b>（今台中龍井）
+      </div>
+      <div class="origin-line" style="font-size:0.92em;color:#666;">
+        若從更完整的族譜脈絡來看，丹山並非起點，而是金門青嶼張氏支脈向福建再遷衍、再渡台的重要中繼地。
+      </div>
+
+      <div class="origin-note" style="margin-top:16px;">
+        <b>資料來源</b>：《金門青嶼社張氏重恩堂集及族系譜圖等專輯》（民國80年印）、
+        《福建省漳浦縣張氏族譜》、漳浦縣古致丹山源流登記表、丹山族譜手抄本、
+        金門青嶼碑刻《青嶼張氏忠勤世澤世系源流考》。
+      </div>
+      <div class="origin-note" style="font-size:0.85em;color:#999;margin-top:8px;">
+        <b>勘誤說明</b>：本頁內容係依現存碑刻、族譜文獻及後人整理資料交互比對後彙整，部分世次、人物銜接、稱謂、年代與個別細節，仍可能因不同譜本版本、抄錄差異或地方傳述而有異文，後續仍需持續勘誤與補正。如有與家藏原譜、祖廟碑刻或正式刊印譜牒不一致之處，仍以原始譜牒與家族正式文獻為準。
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gen-stats" id="genStats"></div>
+
+<div class="view-tabs">
+  <button class="view-tab active" onclick="switchView('tree')">🌳 族譜樹</button>
+  <button class="view-tab" onclick="switchView('list')">📋 世代列表</button>
+</div>
+
+<div class="tree-wrap" id="treeView">
+  <div class="tree" id="treeRoot"></div>
+</div>
+
+<div class="list-view" id="listView"></div>
+
+<!-- Detail panel -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+  <button class="close-btn" onclick="closePanel()">&times;</button>
+  <div id="panelContent"></div>
+</div>
+
+<!-- Sheet ID hardcoded for security (admin only) -->
+
+<!-- ── 關於這份族譜 ── -->
+<div style="max-width:640px;margin:48px auto 0;padding:0 20px 24px;border-top:2px solid #E8E0D0;">
+  <p style="text-align:center;font-size:14px;color:#888;margin:28px 0 20px;line-height:1.9;letter-spacing:0.5px;">
+    這份族譜的背後，是一群想把家族記憶留下來的人。<br>
+    從泛黃的紙本一頁頁翻起，到今天能在手機上點開，<br>
+    靠的不是什麼了不起的技術，而是對這個家族的在乎。
+  </p>
+
+  <!-- 張聖宏 -->
+  <div style="background:linear-gradient(135deg,#F9F5EB 0%,#FFF8E7 100%);border:1px solid #E8E0D0;border-radius:12px;padding:24px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="font-size:22px;font-weight:700;letter-spacing:3px;color:#2C2C2C;">張聖宏</span>
+      <span style="font-size:11px;color:#fff;background:#4A6741;padding:2px 10px;border-radius:10px;">資料收集・整理</span>
+    </div>
+    <div style="font-size:14px;color:#555;line-height:2;">
+      台中海線出生，祖籍金門。暨南大學畢業後，回到金門大學念閩南文化碩士。<br>
+      以筆耕為業，寫的是文化、鄉土、隨筆。<br>
+      這份族譜的原始資料，是他一頁一頁從老族譜裡翻出來、記下來的。
+    </div>
+    <div style="margin-top:8px;font-size:12px;">
+      <a href="https://www.instagram.com/tiunn_sing_hong_0909" target="_blank" style="color:#8B6914;text-decoration:none;">IG @tiunn_sing_hong_0909</a>
+    </div>
+  </div>
+
+  <!-- 張現傑 -->
+  <div style="text-align:center;font-size:13px;color:#999;line-height:1.8;">
+    數位整理協助：<span style="color:#666;font-weight:600;">張現傑</span>（睦聚地產開發）
+  </div>
+</div>
+
+<footer>
+  張丙公派系表（丙派）── 麗水港（龍井）── 資料來源：族譜照片辨識 + Google Sheets<br>
+  標有 ⚠ 者為辨識不確定，請在 Google Sheets 中校對後刪除「辨識不確定」欄的 TRUE
+</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONFIG（Sheet ID 硬編碼，僅管理員可修改原始碼）
+// ══════════════════════════════════════════════════════
+const SHEET_ID = '1fS1nFX5Xg15UKNhXeaUFRvBrxTvKrRp7MG7cpWqdO5M';
+const SHEET_GID = '0';
+
+function getSheetUrl() {
+  if (!SHEET_ID || SHEET_ID === 'SHEET_ID_HERE') return null;
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+}
+
+// ══════════════════════════════════════════════════════
+//  GEN HELPERS
+// ══════════════════════════════════════════════════════
+const GEN_COLORS = {13:'var(--gen13)',14:'var(--gen14)',15:'var(--gen15)',16:'var(--gen16)',17:'var(--gen17)',18:'var(--gen18)',19:'var(--gen19)',20:'var(--gen20)',21:'var(--gen21)',22:'var(--gen22)'};
+const GEN_NAMES = {13:'十三世',14:'十四世',15:'十五世',16:'十六世',17:'十七世',18:'十八世',19:'十九世',20:'二十世',21:'二十一世',22:'二十二世'};
+
+// ══════════════════════════════════════════════════════
+//  YEAR CONVERSION 西元 ↔ 民國
+// ══════════════════════════════════════════════════════
+function formatYear(input) {
+  if (!input) return '';
+  const s = String(input).trim();
+  const num = parseInt(s.replace(/[年]/g, ''));
+  if (isNaN(num)) return s;
+  if (num > 1911) {
+    // 西元 → 顯示兩者
+    const roc = num - 1911;
+    return `西元 ${num} 年（民國 ${roc} 年）`;
+  } else if (num > 0 && num <= 200) {
+    // 可能是民國 → 顯示兩者
+    const ad = num + 1911;
+    return `民國 ${num} 年（西元 ${ad} 年）`;
+  }
+  return s;
+}
+
+// ══════════════════════════════════════════════════════
+//  FALLBACK DATA (used when no Google Sheet is connected)
+// ══════════════════════════════════════════════════════
+const FALLBACK_CSV = `id,姓名,性別,世代,父親id,配偶,備註,存歿,居住縣市,職業,辨識不確定
+1,張丙,男,13,,,開基祖,,,,
+1.1,回常,男,14,1,,,,,,
+1.1.1,連,男,15,1.1,,張媽萬是國,,,,
+1.1.1.1,九令,男,16,1.1.1,張媽王謹,長,,,,
+1.1.1.2,片九,男,16,1.1.1,林氏,次,,,,
+1.1.1.1.1,寶,男,17,1.1.1.1,張媽王寅,長,,,,
+1.1.1.1.2,金龍,男,17,1.1.1.1,,次,,,,
+1.1.1.1.3,屋,男,17,1.1.1.1,,三,,,,
+1.1.1.1.4,曾,男,17,1.1.1.1,,四,,,,
+1.1.1.1.1.1,甘棠,男,18,1.1.1.1.1,,大,,,,
+1.1.1.1.1.2,九順,男,18,1.1.1.1.1,張媽嚴綱,,,,,
+1.1.1.1.1.3,允,男,18,1.1.1.1.1,,長,,,,TRUE
+1.1.1.1.1.1.1,瑞金,男,19,1.1.1.1.1.1,,,,,,
+1.1.1.1.1.1.2,西川,男,19,1.1.1.1.1.1,,,,,,
+1.1.1.1.1.1.3,條水,男,19,1.1.1.1.1.1,,,,,,
+1.1.1.1.1.1.1.1,勝義,男,20,1.1.1.1.1.1.1,,,,,,
+1.1.1.1.1.1.2.1,基州,男,20,1.1.1.1.1.1.2,,,,,,
+1.1.1.1.1.1.2.2,基全,男,20,1.1.1.1.1.1.2,,,,,,
+1.1.1.1.1.1.3.1,鴻文,男,20,1.1.1.1.1.1.3,,,,,,
+1.1.1.1.1.1.3.2,鴻棋,男,20,1.1.1.1.1.1.3,,,,,,
+1.1.1.1.1.1.3.3,鴻銘,男,20,1.1.1.1.1.1.3,,,,,,
+1.1.1.1.1.2.1,清輝,男,19,1.1.1.1.1.2,,次,,,,
+1.1.1.1.1.2.2,東吉,男,19,1.1.1.1.1.2,,長,,,,TRUE
+1.1.1.1.1.2.1.1,興正,男,20,1.1.1.1.1.2.1,,,,,,TRUE
+1.1.1.1.1.2.1.2,興吉,男,20,1.1.1.1.1.2.1,,,,,,TRUE
+1.1.1.1.2.1,令,男,18,1.1.1.1.2,,,,,,
+1.1.1.1.2.2,份,男,18,1.1.1.1.2,,,,,,
+1.1.1.1.2.2.1,曉仁,男,19,1.1.1.1.2.2,,長,,,,
+1.1.1.1.2.2.2,添福,男,19,1.1.1.1.2.2,,,,,,
+1.1.1.1.2.2.3,添財,男,19,1.1.1.1.2.2,,次,,,,
+1.1.1.1.2.2.4,火成,男,19,1.1.1.1.2.2,,,,,,
+1.1.1.1.2.2.5,火炎,男,19,1.1.1.1.2.2,,,,,,
+1.1.1.1.2.2.1.1,明暉,男,20,1.1.1.1.2.2.1,,,,,,
+1.1.1.1.2.2.1.2,明德,男,20,1.1.1.1.2.2.1,,,,,,
+1.1.1.1.2.2.4.1,文益,男,20,1.1.1.1.2.2.4,,,,,,
+1.1.1.1.2.2.5.1,吉龍,男,20,1.1.1.1.2.2.5,,,,,,TRUE
+1.1.1.1.2.2.5.1.1,權,男,21,1.1.1.1.2.2.5.1,,長,,,,
+1.1.1.1.3.1,壽,男,18,1.1.1.1.3,,長,,,,
+1.1.1.1.3.2,成東,男,18,1.1.1.1.3,,次,,,,
+1.1.1.1.3.3,清秀,男,18,1.1.1.1.3,,,,,,
+1.1.1.1.3.4,阿萬,男,18,1.1.1.1.3,,四,,,,
+1.1.1.1.3.1.1,聖賢,男,19,1.1.1.1.3.1,,,,,,
+1.1.1.1.3.1.2,義高,男,19,1.1.1.1.3.1,,,,,,
+1.1.1.1.3.1.3,義泉,男,19,1.1.1.1.3.1,,,,,,
+1.1.1.1.3.1.4,聖哲,男,19,1.1.1.1.3.1,,次,,,,
+1.1.1.1.3.1.1.1,銘詠,男,20,1.1.1.1.3.1.1,,,,,,
+1.1.1.1.3.1.4.2,銘原,男,20,1.1.1.1.3.1.4,,,,,,
+1.1.1.1.3.1.4.1,明裕,男,20,1.1.1.1.3.1.4,,長,,,,
+1.1.1.1.3.3.1,基安,男,19,1.1.1.1.3.3,,,,,,
+1.1.1.1.3.3.2,志賢,男,19,1.1.1.1.3.3,,,,,,
+1.1.1.1.3.3.3,欽銘,男,19,1.1.1.1.3.3,,,,,,
+1.1.1.1.3.3.4,敏雄,男,19,1.1.1.1.3.3,,,,,,
+1.1.1.1.4.1.0,順發,男,19,1.1.1.1.4.1,,,,,,
+1.1.1.1.3.4.2,義昌,男,19,1.1.1.1.3.4,,長,,,,
+1.1.1.1.3.4.1,義宗,男,19,1.1.1.1.3.4,,次,,,,
+1.1.1.1.4.1,柳,男,18,1.1.1.1.4,施舍,長,,,,
+1.1.1.1.4.2,老土,男,18,1.1.1.1.4,,次,,,,
+1.1.1.1.4.3,黑烟,男,18,1.1.1.1.4,劉鍈妹,四,,,,TRUE
+1.1.1.1.4.4,萬貴,男,18,1.1.1.1.4,蘭黃寶珠,五,,,,
+1.1.1.1.4.1.1,德川,男,19,1.1.1.1.4.1,,次,,,,
+1.1.1.1.4.1.3,德南,男,19,1.1.1.1.4.1,,三,,,,
+1.1.1.1.4.1.1.1,寶鄉,男,20,1.1.1.1.4.1.1,,次,,,,
+1.1.1.1.4.1.1.2,寶全,男,20,1.1.1.1.4.1.1,,五,,,,TRUE
+1.1.1.1.4.1.2.1,順田,男,20,1.1.1.1.4.1.3,,,,,,
+1.1.1.1.4.2.1,朝榮,男,19,1.1.1.1.4.2,,,,,,
+1.1.1.1.4.2.1.1,源,男,20,1.1.1.1.4.2.1,,,,,,TRUE
+1.1.1.1.4.2.1.2,木,男,20,1.1.1.1.4.2.1,,,,,,TRUE
+1.1.1.1.4.2.1.3,國忠,男,20,1.1.1.1.4.2.1,,長,,,,
+1.1.1.1.4.2.1.4,仁,男,20,1.1.1.1.4.2.1,,,,,,TRUE
+1.1.1.1.4.2.1.5,山,男,20,1.1.1.1.4.2.1,,,,,,TRUE
+1.1.1.1.4.3.1,進興,男,19,1.1.1.1.4.3,,,,,,
+1.1.1.1.4.3.2,進豐,男,19,1.1.1.1.4.3,,,,,,
+1.1.1.1.4.4.1,宏實,男,19,1.1.1.1.4.4,,,,,,TRUE
+1.1.1.1.4.4.2,錦瑞,男,19,1.1.1.1.4.4,,,,,,
+1.1.1.1.4.4.3,錦源,男,19,1.1.1.1.4.4,,,,,,
+1.1.1.1.4.4.4,進參,男,19,1.1.1.1.4.4,,三,,,,
+1.1.1.1.4.4.1.1,世旦,男,20,1.1.1.1.4.4.1,,,,,,TRUE
+1.1.1.1.4.4.1.2,世陽,男,20,1.1.1.1.4.4.1,,,,,,TRUE
+1.1.1.1.4.4.2.1,仕吉,男,20,1.1.1.1.4.4.2,,,,,,TRUE
+1.1.1.1.4.4.3.1,銓河,男,20,1.1.1.1.4.4.3,,,,,,TRUE
+1.1.1.1.4.4.3.2,由鎮,男,20,1.1.1.1.4.4.3,,,,,,TRUE
+1.1.1.1.4.4.5,朝家,男,19,1.1.1.1.4.4,,三?從No.3圖,,,,TRUE
+1.1.1.1.4.4.6,朝安,男,19,1.1.1.1.4.4,,次?從No.3圖,,,,TRUE
+1.1.1.1.4.4.5.1,國華,男,20,1.1.1.1.4.4.5,,,,,,TRUE
+1.1.1.1.4.4.5.2,國富,男,20,1.1.1.1.4.4.5,,,,,,TRUE
+1.1.1.1.4.4.6.1,志,男,20,1.1.1.1.4.4.6,,,,,,TRUE
+1.1.1.1.4.4.6.2,欽友,男,20,1.1.1.1.4.4.6,,,,,,TRUE
+1.1.1.2.1,秋桂,男,17,1.1.1.2,,長,,,,
+1.1.1.2.2,阿楠,男,17,1.1.1.2,,次,,,,
+1.1.1.2.3,其汪,男,17,1.1.1.2,,,,,,TRUE
+1.1.1.2.4,其清,男,17,1.1.1.2,,次,,,,TRUE
+1.1.1.2.5,其明,男,17,1.1.1.2,,長,,,,TRUE
+1.1.1.2.1.1,智,男,18,1.1.1.2.1,,,,,,
+1.1.1.2.1.2,英,男,18,1.1.1.2.1,,次,,,,
+1.1.1.2.1.3,見成,男,18,1.1.1.2.1,,長,,,,
+1.1.1.2.1.1.1,歐春,男,19,1.1.1.2.1.1,,長,,,,TRUE
+1.1.1.2.1.1.2,柏,男,19,1.1.1.2.1.1,,次,,,,TRUE
+1.1.1.2.1.1.3,德生,男,19,1.1.1.2.1.1,,四,,,,TRUE
+1.1.1.2.1.1.4,武勇,男,19,1.1.1.2.1.1,,,,,,
+1.1.1.2.1.1.5,金塗,男,19,1.1.1.2.1.1,,,,,,TRUE
+1.1.1.2.1.1.4.1,文閱,男,20,1.1.1.2.1.1.4,,次,,,,TRUE
+1.1.1.2.1.1.4.2,文聰,男,20,1.1.1.2.1.1.4,,長,,,,
+1.1.1.2.1.1.4.2.1,魁,男,21,1.1.1.2.1.1.4.2,,,,,,
+1.1.1.2.1.2.1,福灶,男,19,1.1.1.2.1.2,,長,,,,
+1.1.1.2.1.2.2,欽,男,19,1.1.1.2.1.2,,,,,,
+1.1.1.2.1.2.1.1,晉全,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.2,晉崑,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.3,晉文,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.4,晉協,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.5,晉暄,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.6,晉中,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.7,晉昌,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.1.8,晉坤,男,20,1.1.1.2.1.2.1,,,,,,TRUE
+1.1.1.2.1.2.2.1,安泉,男,20,1.1.1.2.1.2.2,,,,,,
+1.1.1.2.1.2.2.2,安昌,男,20,1.1.1.2.1.2.2,,,,,,TRUE
+1.1.1.2.1.3.1,火,男,19,1.1.1.2.1.3,,三,,,,TRUE
+1.1.1.2.1.3.2,雄,男,19,1.1.1.2.1.3,,,,,,
+1.1.1.2.2.1,智見,男,18,1.1.1.2.2,,承嗣(待確認-無本筆資料),,,,TRUE
+1.1.1.2.2.2,朝宗,男,18,1.1.1.2.2,,四,,,,
+1.1.1.2.2.2.1,樹松,男,19,1.1.1.2.2.2,,,,,,TRUE
+1.1.1.2.2.2.2,生田,男,19,1.1.1.2.2.2,,,,,,TRUE
+1.1.1.2.2.2.2.1,有福,男,20,1.1.1.2.2.2.2,,,,,,TRUE
+1.1.1.2.2.2.2.2,有山,男,20,1.1.1.2.2.2.2,,,,,,TRUE
+1.1.1.2.2.2.2.3,有明,男,20,1.1.1.2.2.2.2,,,,,,TRUE
+1.1.1.2.2.2.2.1.1,文升,男,21,1.1.1.2.2.2.2.1,,長,,,,
+1.1.1.2.5.1,丁吉,男,18,1.1.1.2.5,,,,,,TRUE
+1.1.1.2.5.2,科,男,18,1.1.1.2.5,,,,,,TRUE`;
+
+// ══════════════════════════════════════════════════════
+//  CSV PARSER
+// ══════════════════════════════════════════════════════
+// 欄位名稱對照：Google Sheet → 程式碼內部使用
+const HEADER_MAP = {
+  'ID': 'id', 'Id': 'id',
+  '父親ID': '父親id', '父親Id': '父親id', 'parent_id': '父親id',
+  '待確認': '辨識不確定',
+  '排行序號': '排行序號', '父親姓名': '父親姓名'
+};
+function normalizeHeader(h) {
+  const trimmed = h.trim().replace(/^"|"$/g, '');
+  return HEADER_MAP[trimmed] || trimmed;
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const rawHeaders = parseCSVLine(lines[0]);
+  const headers = rawHeaders.map(normalizeHeader);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const vals = parseCSVLine(lines[i]);
+    if (vals.length < 2 || !vals[0].trim()) continue;
+    const obj = {};
+    headers.forEach((h, idx) => obj[h] = (vals[idx]||'').trim().replace(/^"|"$/g,''));
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { current += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { result.push(current); current = ''; }
+      else { current += ch; }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+// ══════════════════════════════════════════════════════
+//  BUILD TREE FROM FLAT DATA
+// ══════════════════════════════════════════════════════
+let allPeople = {};
+
+function buildTree(rows) {
+  const map = {};
+  rows.forEach(r => {
+    r._children = [];
+    map[r.id] = r;
+  });
+  allPeople = map;
+
+  let roots = [];
+  rows.forEach(r => {
+    const pid = r['父親id'] || r['parent_id'] || '';
+    if (pid && map[pid]) {
+      map[pid]._children.push(r);
+    } else if (!pid) {
+      roots.push(r);
+    }
+  });
+
+  // Sort siblings by birth order (長=1, 次=2, 三=3...)
+  const ORDER_MAP = {'長':1,'大':1,'次':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+  function getOrder(person) {
+    const note = person['備註'] || person.note || '';
+    const m = note.match(/^(長|大|次|三|四|五|六|七|八|九|十)/);
+    if (m) return ORDER_MAP[m[1]] || 99;
+    // Fallback: use last digit of ID
+    const parts = (person.id || '').split('.');
+    const last = parseInt(parts[parts.length - 1]);
+    return isNaN(last) ? 99 : last;
+  }
+  function sortChildren(node) {
+    if (node._children && node._children.length > 1) {
+      node._children.sort((a, b) => getOrder(a) - getOrder(b));
+    }
+    if (node._children) node._children.forEach(sortChildren);
+  }
+  roots.forEach(sortChildren);
+
+  return roots;
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════
+function countDescendants(person) {
+  if (!person._children || !person._children.length) return 0;
+  let count = person._children.length;
+  person._children.forEach(c => { count += countDescendants(c); });
+  return count;
+}
+
+function renderNode(person, depth) {
+  if (depth === undefined) depth = 0;
+  const has = person._children && person._children.length > 0;
+  const li = document.createElement('li');
+  // Start collapsed by default (except root at depth 0)
+  li.className = has ? (depth === 0 ? 'expanded' : 'collapsed') : '';
+  li.dataset.id = person.id;
+
+  const gen = parseInt(person['世代'] || person.gen) || 0;
+  const name = person['姓名'] || person.name || '';
+  const gender = person['性別'] || '';
+  const spouse = person['配偶'] || person.spouse || '';
+  const note = person['備註'] || person.note || '';
+  const status = person['存歿'] || '';
+  const city = person['居住縣市'] || '';
+  const job = person['職業'] || '';
+  const uncertain = (person['辨識不確定'] || '').toUpperCase() === 'TRUE';
+
+  // Extract birth order from 備註 (長/次/三/四/五/六/...)
+  const orderMatch = note.match(/^(長|次|三|四|五|六|七|八|九|十|大|承嗣)/);
+  const orderLabel = orderMatch ? orderMatch[1] : '';
+  // Strip the order from note display to avoid duplication
+  const noteDisplay = note.replace(/^(長|次|三|四|五|六|七|八|九|十|大|承嗣)[，,]?/, '').trim();
+
+  const nodeDiv = document.createElement('div');
+  nodeDiv.className = 'node';
+  nodeDiv.dataset.id = person.id;
+  nodeDiv.onclick = (e) => { if(!e.target.classList.contains('toggle-btn') && !e.target.classList.contains('desc-hint')) openPanel(person.id); };
+
+  let h = '';
+  if (has) h += '<span class="toggle-btn" onclick="event.stopPropagation();toggleNode(this.closest(\'li\'))"></span>';
+  h += `<span class="gen" style="background:${GEN_COLORS[gen]||'#999'}">${GEN_NAMES[gen]||gen+'世'}</span>`;
+  if (gender === '男') h += '<span class="gender-icon male" title="男">♂</span>';
+  else if (gender === '女') h += '<span class="gender-icon female" title="女">♀</span>';
+  h += `<span class="name">${name}</span>`;
+  if (orderLabel) h += `<span class="order-tag">${orderLabel}</span>`;
+  if (status === '歿') h += '<span class="status-tag deceased">歿</span>';
+  if (spouse) h += `<span class="spouse-tag">配 ${spouse}</span>`;
+  if (noteDisplay) h += `<span class="note-tag">${noteDisplay}</span>`;
+  if (city || job) h += `<span class="info-tag">${[city,job].filter(Boolean).join('・')}</span>`;
+  if (uncertain) h += '<span class="uncertain" title="照片辨識不確定，請校對">⚠</span>';
+  // Show descendant count hint on collapsed nodes
+  if (has) {
+    const descCount = countDescendants(person);
+    h += `<span class="desc-hint" onclick="event.stopPropagation();toggleNode(this.closest('li'))">+${descCount}人</span>`;
+  }
+
+  nodeDiv.innerHTML = h;
+  li.appendChild(nodeDiv);
+
+  if (has) {
+    const ul = document.createElement('ul');
+    person._children.forEach(c => ul.appendChild(renderNode(c, depth + 1)));
+    li.appendChild(ul);
+  }
+  return li;
+}
+
+function renderTree(roots) {
+  const container = document.getElementById('treeRoot');
+  container.innerHTML = '';
+  const ul = document.createElement('ul');
+  roots.forEach(r => ul.appendChild(renderNode(r)));
+  container.appendChild(ul);
+
+  // Stats
+  const total = Object.keys(allPeople).length;
+  const gens = [...new Set(Object.values(allPeople).map(p => parseInt(p['世代']||p.gen)||0))].sort((a,b)=>a-b);
+  const uncertainCount = Object.values(allPeople).filter(p => (p['辨識不確定']||'').toUpperCase()==='TRUE').length;
+
+
+  document.getElementById('statsRow').innerHTML =
+    `共 <b>${total}</b> 人 ｜ ${GEN_NAMES[gens[0]]||''} 至 ${GEN_NAMES[gens[gens.length-1]]||''} ｜ ` +
+    (uncertainCount ? `<span style="color:#C0392B">⚠ 待確認 <b>${uncertainCount}</b> 人</span>` : '<span style="color:#27AE60">✓ 全部已確認</span>');
+
+  // Render generation filter chips
+  renderGenStats();
+}
+
+// ══════════════════════════════════════════════════════
+//  DETAIL PANEL
+// ══════════════════════════════════════════════════════
+function openPanel(id) {
+  const p = allPeople[id];
+  if (!p) return;
+  const gen = parseInt(p['世代']||p.gen)||0;
+  const name = p['姓名']||p.name||'';
+  const gender = p['性別']||'';
+  const spouse = p['配偶']||p.spouse||'';
+  const note = p['備註']||p.note||'';
+  const status = p['存歿']||'';
+  const city = p['居住縣市']||'';
+  const job = p['職業']||'';
+  const uncertain = (p['辨識不確定']||'').toUpperCase()==='TRUE';
+  const pid = p['父親id']||'';
+  const parent = allPeople[pid];
+
+  const genderIcon = gender === '男' ? ' ♂' : gender === '女' ? ' ♀' : '';
+  let html = `<h2>${name}${genderIcon}</h2>`;
+  html += `<div class="gen-line"><span style="display:inline-block;padding:2px 8px;border-radius:8px;color:#fff;font-size:12px;background:${GEN_COLORS[gen]||'#999'}">${GEN_NAMES[gen]||gen+'世'}</span>`;
+  if (uncertain) html += ' <span style="color:#C0392B;font-size:13px;">⚠ 辨識不確定，請校對</span>';
+  html += '</div>';
+
+  const field = (label, val) => `<div class="field"><label>${label}</label><div class="val${val?'':' empty'}">${val||'尚未填寫'}</div></div>`;
+
+  const birthYear = p['出生年'] || p['birth_year'] || '';
+  const deathYear = p['卒年'] || p['death_year'] || '';
+
+  html += field('性別', gender === '男' ? '♂ 男' : gender === '女' ? '♀ 女' : '');
+  if (birthYear) html += field('出生年', formatYear(birthYear));
+  if (deathYear) html += field('卒年', formatYear(deathYear));
+  html += field('配偶', spouse);
+  html += field('存歿', status === '歿' ? '已故' : '');
+  html += field('居住縣市', city);
+  html += field('職業', job);
+  html += field('備註', note);
+  if (parent) html += field('父親', `${parent['姓名']||parent.name} (${GEN_NAMES[parseInt(parent['世代']||parent.gen)]||''})`);
+
+  if (p._children && p._children.length) {
+    html += '<div class="children-list"><h4>子女：</h4>';
+    p._children.forEach(c => {
+      html += `<span class="child-chip" onclick="openPanel('${c.id}')">${c['姓名']||c.name}</span>`;
+    });
+    html += '</div>';
+  }
+
+  html += `<div class="id-line">ID: ${id}</div>`;
+
+  document.getElementById('panelContent').innerHTML = html;
+  document.getElementById('panel').classList.add('show');
+  document.getElementById('panelOverlay').classList.add('show');
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('show');
+  document.getElementById('panelOverlay').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════════════
+//  TREE CONTROLS
+// ══════════════════════════════════════════════════════
+function toggleNode(li) {
+  const wasCollapsed = li.classList.contains('collapsed');
+  li.classList.toggle('collapsed');
+  li.classList.toggle('expanded');
+  if (wasCollapsed) {
+    // Play reveal animation
+    li.classList.add('expanding');
+    setTimeout(() => li.classList.remove('expanding'), 400);
+  }
+}
+function expandAll() { document.querySelectorAll('.tree li.collapsed').forEach(li => { li.classList.remove('collapsed'); li.classList.add('expanded'); }); }
+function collapseAll() { document.querySelectorAll('.tree li.expanded').forEach(li => { if(li.querySelector(':scope>ul')){ li.classList.remove('expanded'); li.classList.add('collapsed'); }}); }
+function expandToGen(maxGen) {
+  // First collapse all, then expand only nodes up to maxGen
+  collapseAll();
+  document.querySelectorAll('.tree .node').forEach(node => {
+    const id = node.dataset.id || '';
+    const p = allPeople[id];
+    if (!p) return;
+    const g = parseInt(p['世代'] || p.gen) || 0;
+    if (g < maxGen) {
+      const li = node.closest('li');
+      if (li && li.querySelector(':scope>ul')) {
+        li.classList.remove('collapsed');
+        li.classList.add('expanded');
+      }
+    }
+  });
+}
+function startExplore() {
+  const overlay = document.getElementById('welcomeOverlay');
+  overlay.classList.add('hide');
+  setTimeout(() => overlay.style.display = 'none', 600);
+}
+function toggleLegend() { document.getElementById('legend').classList.toggle('show'); }
+function toggleAncestry() {
+  const c = document.getElementById('ancestryContent');
+  const a = document.getElementById('ancestryArrow');
+  c.classList.toggle('show');
+  a.classList.toggle('open');
+}
+
+function searchTree(q) {
+  document.querySelectorAll('.node').forEach(n => n.classList.remove('highlighted'));
+  if (!q.trim()) return;
+  document.querySelectorAll('.node').forEach(node => {
+    const id = node.dataset.id || '';
+    const p = allPeople[id];
+    if (!p) return;
+    const searchable = [p['姓名'],p.name,p['配偶'],p.spouse,p['備註'],p.note,p['居住縣市'],p['職業']].filter(Boolean).join('');
+    if (searchable.includes(q.trim())) {
+      node.classList.add('highlighted');
+      let parent = node.closest('li').parentElement.closest('li');
+      while (parent) { parent.classList.remove('collapsed'); parent.classList.add('expanded'); parent = parent.parentElement.closest('li'); }
+    }
+  });
+}
+
+// Config modal removed — Sheet ID is hardcoded for security
+
+// ══════════════════════════════════════════════════════
+//  LOAD DATA
+// ══════════════════════════════════════════════════════
+async function loadData() {
+  const bar = document.getElementById('statusBar');
+  const url = getSheetUrl();
+
+  if (!url) {
+    bar.innerHTML = '<span class="dot ok"></span> 使用內建資料';
+    const rows = parseCSV(FALLBACK_CSV);
+    const roots = buildTree(rows);
+    renderTree(roots);
+    return;
+  }
+
+  bar.innerHTML = '<span class="dot loading"></span> 正在從 Google Sheets 載入…';
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const text = await resp.text();
+    if (!text.includes('父親id') && !text.includes('父親ID') && !text.includes('parent_id')) throw new Error('回傳非族譜資料');
+    const rows = parseCSV(text);
+    if (rows.length < 10) throw new Error(`資料筆數異常（${rows.length}）`);
+    // Validate: at least some rows must have parent IDs
+    const withPid = rows.filter(r => r['父親id'] || r['parent_id']).length;
+    if (withPid < 5) throw new Error('父親id欄位缺失');
+    const roots = buildTree(rows);
+    renderTree(roots);
+    const now = new Date().toLocaleTimeString('zh-TW');
+    bar.innerHTML = `<span class="dot ok"></span> ✓ 已從 Google Sheets 同步（${rows.length}筆，${now}）── 重新整理網頁即可取得最新資料`;
+  } catch (err) {
+    console.error(err);
+    bar.innerHTML = `<span class="dot err"></span> Google Sheets 載入失敗：${err.message} ── 使用內建資料`;
+    const rows = parseCSV(FALLBACK_CSV);
+    const roots = buildTree(rows);
+    renderTree(roots);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  VIEW SWITCH (tree vs list)
+// ══════════════════════════════════════════════════════
+let currentView = 'tree';
+let activeGenFilter = null; // null = all
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.view-tab[onclick="switchView('${view}')"]`).classList.add('active');
+  document.getElementById('treeView').style.display = view === 'tree' ? '' : 'none';
+  const lv = document.getElementById('listView');
+  if (view === 'list') { lv.classList.add('show'); renderListView(); }
+  else { lv.classList.remove('show'); }
+}
+
+// ══════════════════════════════════════════════════════
+//  GEN STATS CHIPS + FILTER
+// ══════════════════════════════════════════════════════
+function renderGenStats() {
+  const people = Object.values(allPeople);
+  const genMap = {};
+  people.forEach(p => {
+    const g = parseInt(p['世代'] || p.gen) || 0;
+    if (!genMap[g]) genMap[g] = [];
+    genMap[g].push(p);
+  });
+  const gens = Object.keys(genMap).map(Number).sort((a, b) => a - b);
+
+  let html = `<div class="gen-chip ${activeGenFilter === null ? 'active' : ''}" onclick="filterGen(null)">
+    <span style="font-size:14px">👥</span> 全部 <span class="gen-count">${people.length}</span></div>`;
+  gens.forEach(g => {
+    const color = GEN_COLORS[g] || '#999';
+    html += `<div class="gen-chip ${activeGenFilter === g ? 'active' : ''}" onclick="filterGen(${g})">
+      <span class="gen-dot" style="background:${color}"></span>
+      ${GEN_NAMES[g] || g + '世'}
+      <span class="gen-count">${genMap[g].length}</span></div>`;
+  });
+  document.getElementById('genStats').innerHTML = html;
+}
+
+function filterGen(gen) {
+  activeGenFilter = gen;
+  renderGenStats();
+
+  if (currentView === 'list') {
+    renderListView();
+    return;
+  }
+  // In tree view: highlight matching nodes, dim others
+  document.querySelectorAll('.tree .node').forEach(node => {
+    const id = node.dataset.id || '';
+    const p = allPeople[id];
+    if (!p) return;
+    const g = parseInt(p['世代'] || p.gen) || 0;
+    if (gen === null) {
+      node.style.opacity = '';
+      node.style.transform = '';
+    } else if (g === gen) {
+      node.style.opacity = '1';
+      node.style.transform = 'scale(1.02)';
+      node.classList.add('highlighted');
+      // Expand parents
+      let parent = node.closest('li').parentElement.closest('li');
+      while (parent) { parent.classList.remove('collapsed'); parent.classList.add('expanded'); parent = parent.parentElement.closest('li'); }
+    } else {
+      node.style.opacity = '0.3';
+      node.style.transform = '';
+      node.classList.remove('highlighted');
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  LIST VIEW (by generation, sorted by birth order)
+// ══════════════════════════════════════════════════════
+const ORDER_MAP_LIST = {'長':1,'大':1,'次':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+
+function getPersonOrder(p) {
+  const note = p['備註'] || p.note || '';
+  const m = note.match(/^(長|大|次|三|四|五|六|七|八|九|十)/);
+  if (m) return ORDER_MAP_LIST[m[1]] || 99;
+  const parts = (p.id || '').split('.');
+  const last = parseInt(parts[parts.length - 1]);
+  return isNaN(last) ? 99 : last;
+}
+
+function getOrderLabel(p) {
+  const note = p['備註'] || p.note || '';
+  const m = note.match(/^(長|大|次|三|四|五|六|七|八|九|十|承嗣)/);
+  return m ? m[1] : '';
+}
+
+function getRelationHint(gen, minGen, maxGen) {
+  const mid = Math.round((minGen + maxGen) / 2);
+  if (gen < mid - 1) return '長輩';
+  if (gen > mid + 1) return '晚輩';
+  return '平輩';
+}
+
+function renderListView() {
+  const people = Object.values(allPeople);
+  const genMap = {};
+  people.forEach(p => {
+    const g = parseInt(p['世代'] || p.gen) || 0;
+    if (!genMap[g]) genMap[g] = [];
+    genMap[g].push(p);
+  });
+  const gens = Object.keys(genMap).map(Number).sort((a, b) => a - b);
+  const minGen = gens[0], maxGen = gens[gens.length - 1];
+
+  // Filter
+  const showGens = activeGenFilter !== null ? [activeGenFilter] : gens;
+
+  let html = '';
+  showGens.forEach(g => {
+    if (!genMap[g]) return;
+    const color = GEN_COLORS[g] || '#999';
+    const hint = getRelationHint(g, minGen, maxGen);
+
+    // Sort: by parent group then by birth order within group
+    const sorted = [...genMap[g]].sort((a, b) => {
+      const pa = a['父親id'] || '';
+      const pb = b['父親id'] || '';
+      if (pa !== pb) return pa.localeCompare(pb);
+      return getPersonOrder(a) - getPersonOrder(b);
+    });
+
+    html += `<div class="list-gen-section" data-gen="${g}">
+      <div class="list-gen-header" style="background:${color}" onclick="toggleListSection(this)">
+        <h3>${GEN_NAMES[g] || g + '世'}</h3>
+        <span class="count-badge">${sorted.length} 人</span>
+        <span class="relation-hint">${hint}</span>
+      </div>
+      <div class="list-gen-body">`;
+
+    // Group by father for sub-headers
+    let lastParent = null;
+    sorted.forEach((p, idx) => {
+      const pid = p['父親id'] || '';
+      const parent = allPeople[pid];
+      const parentName = parent ? (parent['姓名'] || parent.name || '') : '';
+      const name = p['姓名'] || p.name || '';
+      const gender = p['性別'] || '';
+      const status = p['存歿'] || '';
+      const spouse = p['配偶'] || p.spouse || '';
+      const city = p['居住縣市'] || '';
+      const job = p['職業'] || '';
+      const order = getOrderLabel(p);
+      const uncertain = (p['辨識不確定'] || '').toUpperCase() === 'TRUE';
+
+      const genderClass = gender === '男' ? 'male' : gender === '女' ? 'female' : '';
+      const genderIcon = gender === '男' ? '♂' : gender === '女' ? '♀' : '';
+      const statusIcon = status === '歿' ? '🟣' : '';
+
+      html += `<div class="list-card" onclick="openPanel('${p.id}')">
+        <div class="card-order">${order || (idx + 1)}</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px">
+            ${genderIcon ? `<span class="card-gender ${genderClass}">${genderIcon}</span>` : ''}
+            <span class="card-name">${name}</span>
+            ${statusIcon ? `<span style="font-size:12px">${statusIcon}</span>` : ''}
+            ${uncertain ? '<span style="color:#C0392B;font-size:12px" title="待確認">⚠</span>' : ''}
+          </div>
+          <div class="card-meta">
+            ${parentName ? `<span>父：${parentName}</span>` : ''}
+            ${spouse ? `<span>配：${spouse}</span>` : ''}
+            ${city ? `<span>${city}</span>` : ''}
+            ${job ? `<span>${job}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += '</div></div>';
+  });
+
+  document.getElementById('listView').innerHTML = html;
+}
+
+function toggleListSection(header) {
+  header.nextElementSibling.classList.toggle('collapsed');
+}
+
+// ── Init ──
+loadData();
+</script>
+</body>
+</html>

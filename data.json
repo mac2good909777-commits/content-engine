@@ -1,0 +1,43 @@
+{
+  "project": {
+    "name": "每週內容引擎建置專案",
+    "code": "CONTENT-ENGINE",
+    "startDate": "2026-04-14",
+    "endDate": "2026-06-08",
+    "totalWeeks": 8,
+    "currentWeek": 0,
+    "phase": "Phase 0",
+    "light": "green",
+    "principle": "Costco 模式：少而準，長期建立信任"
+  },
+  "weeklyStatus": {
+    "currentStep": 0,
+    "stepLabels": [
+      "CCW 搜尋市場訊號",
+      "整理候選題庫",
+      "Mac + GPT 選題收斂",
+      "CCW 產出文章",
+      "Mac 審稿確認",
+      "發布"
+    ],
+    "biweekTheme": "",
+    "notes": ""
+  },
+  "candidates": [],
+  "articles": [],
+  "kpi": {
+    "totalArticles": 0,
+    "targetArticles": 8,
+    "consecutiveWeeks": 0,
+    "inquiries": 0,
+    "partnerInteractions": 0
+  },
+  "roles": {
+    "mac": { "status": "idle", "currentTask": "", "lastActive": "" },
+    "gpt": { "status": "idle", "currentTask": "", "lastActive": "" },
+    "cc": { "status": "idle", "currentTask": "", "lastActive": "" },
+    "ccw": { "status": "idle", "currentTask": "", "lastActive": "" }
+  },
+  "controlLog": [],
+  "lastUpdated": "2026-04-11"
+}
