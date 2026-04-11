@@ -23,6 +23,22 @@
     "biweekTheme": "",
     "notes": ""
   },
+  "searchStrategy": {
+    "directions": [
+      { "label": "需求訊號", "desc": "客戶常問的問題、市場上反覆出現的需求模式", "active": true },
+      { "label": "產業觀察", "desc": "產業園區動態、重大投資案、政策變化", "active": true },
+      { "label": "風險提醒", "desc": "常見交易陷阱、法規變更、市場風險", "active": true },
+      { "label": "協作解題", "desc": "跨專業合作案例、仲介實務解法", "active": false },
+      { "label": "案例故事", "desc": "成功案例改寫、匿名情境分享", "active": false }
+    ],
+    "weeklyKeywords": [],
+    "sources": [
+      "591 廠房/土地近期刊登趨勢",
+      "Google Trends 工業地產相關",
+      "內政部/經濟部近期公告",
+      "同業社群討論熱點"
+    ]
+  },
   "candidates": [],
   "articles": [],
   "kpi": {

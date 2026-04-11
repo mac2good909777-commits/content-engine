@@ -237,6 +237,263 @@
       margin-bottom: 38px;
     }
 
+    /* ─── Search Strategy ─── */
+    .strategy-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-grid);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .strategy-directions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .direction-card {
+      border: 1px solid var(--border-grid);
+      border-radius: 6px;
+      padding: 14px;
+      cursor: default;
+      transition: all 0.2s ease;
+    }
+
+    .direction-card.active {
+      border-color: var(--blue-bright);
+      background: rgba(96, 165, 250, 0.06);
+    }
+
+    .direction-card.inactive {
+      opacity: 0.4;
+    }
+
+    .direction-label {
+      font-weight: 700;
+      font-size: 13px;
+      color: #F1F5F9;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .direction-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .direction-dot.on { background: var(--green-up); box-shadow: 0 0 6px var(--green-up); }
+    .direction-dot.off { background: var(--border-grid); }
+
+    .direction-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .keyword-section {
+      margin-bottom: 20px;
+    }
+
+    .keyword-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .keyword-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .keyword-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .keyword-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 16px;
+      font-size: 12px;
+      color: var(--gold-accent);
+      font-weight: 500;
+    }
+
+    .keyword-tag .remove-tag {
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .keyword-tag .remove-tag:hover {
+      opacity: 1;
+    }
+
+    .keyword-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .keyword-input {
+      flex: 1;
+      padding: 8px 14px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-grid);
+      border-radius: 6px;
+      color: var(--text-body);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .keyword-input:focus {
+      border-color: var(--blue-bright);
+    }
+
+    .keyword-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-add {
+      padding: 8px 16px;
+      background: var(--blue-bright);
+      border: none;
+      border-radius: 6px;
+      color: var(--bg-page);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+      background: #93C5FD;
+    }
+
+    .source-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .source-chip {
+      padding: 5px 10px;
+      border: 1px solid var(--border-grid);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Action Buttons ─── */
+    .action-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-grid);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-grid);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .action-btn:hover {
+      border-color: var(--blue-bright);
+      background: rgba(96, 165, 250, 0.06);
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .action-icon.search { background: rgba(96,165,250,0.15); color: var(--blue-bright); }
+    .action-icon.track { background: rgba(251,191,36,0.15); color: var(--gold-accent); }
+    .action-icon.write { background: rgba(74,222,128,0.15); color: var(--green-up); }
+    .action-icon.export { background: rgba(248,113,113,0.15); color: var(--red-down); }
+
+    .action-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #F1F5F9;
+      margin-bottom: 2px;
+    }
+
+    .action-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .action-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #F1F5F9;
+      background: var(--bg-card);
+      border: 1px solid var(--blue-bright);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .action-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     /* ─── Role Status ─── */
     .role-grid {
       display: grid;
@@ -668,6 +925,66 @@
       <div class="workflow-steps" id="workflowSteps"></div>
     </div>
 
+    <!-- Search Strategy -->
+    <div class="section-title">搜尋方向策略</div>
+    <div class="strategy-container">
+      <div class="strategy-directions" id="strategyDirections"></div>
+
+      <div class="keyword-section">
+        <div class="keyword-section-header">
+          <span class="keyword-section-title">本週搜尋關鍵字 / 大方向</span>
+        </div>
+        <div class="keyword-tags" id="keywordTags"></div>
+        <div class="keyword-input-row">
+          <input type="text" class="keyword-input" id="keywordInput" placeholder="輸入關鍵字或方向，按 Enter 加入..." />
+          <button class="btn-add" id="addKeywordBtn">加入</button>
+        </div>
+      </div>
+
+      <div class="keyword-section">
+        <div class="keyword-section-header">
+          <span class="keyword-section-title">資料來源</span>
+        </div>
+        <div class="source-list" id="sourceList"></div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="section-title">主動觸發</div>
+    <div class="action-panel">
+      <div class="action-grid">
+        <div class="action-btn" onclick="triggerAction('search')">
+          <div class="action-icon search">S</div>
+          <div>
+            <div class="action-label">搜尋市場訊號</div>
+            <div class="action-desc">根據本週關鍵字搜尋最新訊號，整理進候選題庫</div>
+          </div>
+        </div>
+        <div class="action-btn" onclick="triggerAction('organize')">
+          <div class="action-icon track">O</div>
+          <div>
+            <div class="action-label">整理候選題庫</div>
+            <div class="action-desc">篩選、排序、標記優先級，準備給 Mac 選題</div>
+          </div>
+        </div>
+        <div class="action-btn" onclick="triggerAction('write')">
+          <div class="action-icon write">W</div>
+          <div>
+            <div class="action-label">產出文章草稿</div>
+            <div class="action-desc">從已選定題目產出初稿，送審</div>
+          </div>
+        </div>
+        <div class="action-btn" onclick="triggerAction('progress')">
+          <div class="action-icon export">P</div>
+          <div>
+            <div class="action-label">進度追蹤報告</div>
+            <div class="action-desc">燈號判斷、KPI 計算、本週工作總結</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="action-toast" id="actionToast"></div>
+
     <!-- Role Status -->
     <div class="section-title">角色狀態</div>
     <div class="role-grid" id="roleGrid"></div>
@@ -780,10 +1097,12 @@
       renderHeader();
       renderKPI();
       renderWorkflow();
+      renderSearchStrategy();
       renderRoles();
       renderCandidates();
       renderArticles();
       renderControlLog();
+      initKeywordInput();
     }
 
     function renderHeader() {
@@ -1033,6 +1352,152 @@
         "'": '&#039;'
       };
       return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // ─── Search Strategy ───
+    function renderSearchStrategy() {
+      const strategy = dashboardData.searchStrategy || { directions: [], weeklyKeywords: [], sources: [] };
+
+      // Directions
+      const dirContainer = document.getElementById('strategyDirections');
+      dirContainer.innerHTML = strategy.directions.map(d => `
+        <div class="direction-card ${d.active ? 'active' : 'inactive'}">
+          <div class="direction-label">
+            <span class="direction-dot ${d.active ? 'on' : 'off'}"></span>
+            ${escapeHtml(d.label)}
+          </div>
+          <div class="direction-desc">${escapeHtml(d.desc)}</div>
+        </div>
+      `).join('');
+
+      // Keywords
+      renderKeywordTags(strategy.weeklyKeywords || []);
+
+      // Sources
+      const sourceContainer = document.getElementById('sourceList');
+      sourceContainer.innerHTML = (strategy.sources || []).map(s =>
+        `<span class="source-chip">${escapeHtml(s)}</span>`
+      ).join('');
+    }
+
+    function renderKeywordTags(keywords) {
+      const container = document.getElementById('keywordTags');
+      if (keywords.length === 0) {
+        container.innerHTML = '<span style="font-size:12px;color:var(--text-muted);">尚未設定本週關鍵字</span>';
+        return;
+      }
+      container.innerHTML = keywords.map((kw, i) =>
+        `<span class="keyword-tag">${escapeHtml(kw)}<span class="remove-tag" onclick="removeKeyword(${i})">×</span></span>`
+      ).join('');
+    }
+
+    function initKeywordInput() {
+      const input = document.getElementById('keywordInput');
+      const btn = document.getElementById('addKeywordBtn');
+      if (!input || !btn) return;
+
+      function addKeyword() {
+        const val = input.value.trim();
+        if (!val) return;
+        if (!dashboardData.searchStrategy) {
+          dashboardData.searchStrategy = { directions: [], weeklyKeywords: [], sources: [] };
+        }
+        if (!dashboardData.searchStrategy.weeklyKeywords) {
+          dashboardData.searchStrategy.weeklyKeywords = [];
+        }
+        if (!dashboardData.searchStrategy.weeklyKeywords.includes(val)) {
+          dashboardData.searchStrategy.weeklyKeywords.push(val);
+          renderKeywordTags(dashboardData.searchStrategy.weeklyKeywords);
+          saveDataJson();
+        }
+        input.value = '';
+        input.focus();
+      }
+
+      btn.onclick = addKeyword;
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') addKeyword();
+      });
+    }
+
+    function removeKeyword(index) {
+      if (!dashboardData.searchStrategy || !dashboardData.searchStrategy.weeklyKeywords) return;
+      dashboardData.searchStrategy.weeklyKeywords.splice(index, 1);
+      renderKeywordTags(dashboardData.searchStrategy.weeklyKeywords);
+      saveDataJson();
+    }
+
+    function saveDataJson() {
+      // Generate downloadable data.json for user to replace locally
+      const blob = new Blob([JSON.stringify(dashboardData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('data.json 已下載，請替換專案目錄中的檔案');
+    }
+
+    // ─── Action Buttons ───
+    function triggerAction(action) {
+      const actions = {
+        search: {
+          label: '搜尋市場訊號',
+          prompt: buildSearchPrompt()
+        },
+        organize: {
+          label: '整理候選題庫',
+          prompt: '請幫我整理內容引擎的候選題庫：篩選、排序、標記優先級。'
+        },
+        write: {
+          label: '產出文章草稿',
+          prompt: '請從已選定的候選題目中，產出一篇文章初稿。'
+        },
+        progress: {
+          label: '進度追蹤報告',
+          prompt: '請產出內容引擎本週進度追蹤報告：燈號判斷、KPI 計算、工作總結。'
+        }
+      };
+
+      const act = actions[action];
+      if (!act) return;
+
+      // Copy prompt to clipboard
+      navigator.clipboard.writeText(act.prompt).then(() => {
+        showToast(`「${act.label}」提示詞已複製到剪貼簿 — 貼到 CCW 即可觸發`);
+      }).catch(() => {
+        // Fallback: show prompt in a textarea
+        const textarea = document.createElement('textarea');
+        textarea.value = act.prompt;
+        textarea.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:200px;z-index:999;font-size:14px;padding:12px;background:#1E293B;color:#CBD5E1;border:2px solid #60A5FA;';
+        document.body.appendChild(textarea);
+        textarea.select();
+        showToast(`「${act.label}」提示詞已顯示，請手動複製`);
+        setTimeout(() => textarea.remove(), 10000);
+      });
+    }
+
+    function buildSearchPrompt() {
+      const strategy = dashboardData.searchStrategy || {};
+      const keywords = (strategy.weeklyKeywords || []).join('、');
+      const activeDirections = (strategy.directions || []).filter(d => d.active).map(d => d.label).join('、');
+      const sources = (strategy.sources || []).join('、');
+
+      let prompt = '讀取 內容引擎 專案記憶\n\n';
+      prompt += '本週搜尋任務：\n';
+      if (activeDirections) prompt += `- 方向：${activeDirections}\n`;
+      if (keywords) prompt += `- 關鍵字/大方向：${keywords}\n`;
+      if (sources) prompt += `- 資料來源：${sources}\n`;
+      prompt += '\n請搜尋市場訊號，整理成候選題庫格式（title/source/theme/priority/status）。';
+      return prompt;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('actionToast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
     }
 
     // Initialize
