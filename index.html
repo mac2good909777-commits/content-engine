@@ -471,6 +471,14 @@
       line-height: 1.4;
     }
 
+    .action-task-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--blue-bright);
+      opacity: 0.6;
+      margin-top: 4px;
+    }
+
     .action-toast {
       position: fixed;
       bottom: 24px;
@@ -493,6 +501,136 @@
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* ─── Prompt Panel ─── */
+    .prompt-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .prompt-overlay.show {
+      display: flex;
+    }
+
+    .prompt-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--blue-bright);
+      border-radius: 12px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    }
+
+    .prompt-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-grid);
+    }
+
+    .prompt-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #F1F5F9;
+    }
+
+    .prompt-panel-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .prompt-panel-close:hover {
+      color: #F1F5F9;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .prompt-panel-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .prompt-text {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-body);
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: var(--bg-page);
+      border: 1px solid var(--border-grid);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .prompt-panel-footer {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-grid);
+    }
+
+    .btn-copy {
+      padding: 10px 24px;
+      background: var(--blue-bright);
+      border: none;
+      border-radius: 6px;
+      color: var(--bg-page);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover { background: #93C5FD; }
+
+    .btn-copy.copied {
+      background: var(--green-up);
+    }
+
+    .btn-cancel {
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border-grid);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover { border-color: var(--text-muted); color: var(--text-body); }
+
+    .prompt-next-step {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: rgba(251,191,36,0.08);
+      border: 1px solid rgba(251,191,36,0.2);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--gold-accent);
+      line-height: 1.6;
+      display: none;
+    }
+
+    .prompt-next-step.show { display: block; }
 
     /* ─── Role Status ─── */
     .role-grid {
@@ -958,6 +1096,7 @@
           <div>
             <div class="action-label">搜尋市場訊號</div>
             <div class="action-desc">根據本週關鍵字搜尋最新訊號，整理進候選題庫</div>
+            <div class="action-task-id">content-engine-search</div>
           </div>
         </div>
         <div class="action-btn" onclick="triggerAction('organize')">
@@ -965,6 +1104,7 @@
           <div>
             <div class="action-label">整理候選題庫</div>
             <div class="action-desc">篩選、排序、標記優先級，準備給 Mac 選題</div>
+            <div class="action-task-id">content-engine-organize</div>
           </div>
         </div>
         <div class="action-btn" onclick="triggerAction('write')">
@@ -972,6 +1112,7 @@
           <div>
             <div class="action-label">產出文章草稿</div>
             <div class="action-desc">從已選定題目產出初稿，送審</div>
+            <div class="action-task-id">content-engine-write</div>
           </div>
         </div>
         <div class="action-btn" onclick="triggerAction('progress')">
@@ -979,11 +1120,34 @@
           <div>
             <div class="action-label">進度追蹤報告</div>
             <div class="action-desc">燈號判斷、KPI 計算、本週工作總結</div>
+            <div class="action-task-id">content-engine-progress</div>
           </div>
         </div>
       </div>
     </div>
     <div class="action-toast" id="actionToast"></div>
+
+    <!-- Prompt Overlay Panel -->
+    <div class="prompt-overlay" id="promptOverlay" onclick="if(event.target===this)closePromptPanel()">
+      <div class="prompt-panel">
+        <div class="prompt-panel-header">
+          <span class="prompt-panel-title" id="promptTitle"></span>
+          <button class="prompt-panel-close" onclick="closePromptPanel()">×</button>
+        </div>
+        <div class="prompt-panel-body">
+          <div class="prompt-text" id="promptText"></div>
+          <div class="prompt-next-step" id="promptNextStep">
+            複製成功 — 兩種觸發方式：<br>
+            <strong>A.</strong> CCW 側邊欄「Scheduled」→ 找到對應任務 → Run now<br>
+            <strong>B.</strong> 在 CCW 對話中貼上這段提示詞
+          </div>
+        </div>
+        <div class="prompt-panel-footer">
+          <button class="btn-cancel" onclick="closePromptPanel()">取消</button>
+          <button class="btn-copy" id="promptCopyBtn" onclick="copyPrompt()">複製提示詞</button>
+        </div>
+      </div>
+    </div>
 
     <!-- Role Status -->
     <div class="section-title">角色狀態</div>
@@ -1440,6 +1604,8 @@
     }
 
     // ─── Action Buttons ───
+    let currentPromptText = '';
+
     function triggerAction(action) {
       const actions = {
         search: {
@@ -1448,34 +1614,49 @@
         },
         organize: {
           label: '整理候選題庫',
-          prompt: '請幫我整理內容引擎的候選題庫：篩選、排序、標記優先級。'
+          prompt: '讀取 內容引擎 專案記憶\n\n請幫我整理內容引擎的候選題庫：\n- 根據本週搜尋方向篩選候選題目\n- 依優先級排序（高/中/低）\n- 標記每題的主題分類\n- 建議本週最適合寫的 1-2 題\n\n輸出格式：更新 data.json 的 candidates 陣列。'
         },
         write: {
           label: '產出文章草稿',
-          prompt: '請從已選定的候選題目中，產出一篇文章初稿。'
+          prompt: '讀取 內容引擎 專案記憶\n\n請從候選題庫中已選定的題目，產出一篇文章初稿。\n\n要求：\n- 維持「需求入口」定位，不要太像教學文\n- 審稿三問自檢：講太深？太像教學？維持需求入口定位？\n- 字數 800-1200 字\n- 結尾引導聯絡（睦聚開發）\n- 輸出 Markdown 格式'
         },
         progress: {
           label: '進度追蹤報告',
-          prompt: '請產出內容引擎本週進度追蹤報告：燈號判斷、KPI 計算、工作總結。'
+          prompt: '讀取 內容引擎 專案記憶\n\n請產出內容引擎本週進度追蹤報告：\n- 燈號判斷（綠/黃/紅）\n- KPI 更新（已發布/連續週數/諮詢數/同業互動）\n- 本週工作總結\n- 下週建議行動\n\n如果連 2 週未產出→黃燈，連 3 週→紅燈。'
         }
       };
 
       const act = actions[action];
       if (!act) return;
 
-      // Copy prompt to clipboard
-      navigator.clipboard.writeText(act.prompt).then(() => {
-        showToast(`「${act.label}」提示詞已複製到剪貼簿 — 貼到 CCW 即可觸發`);
+      currentPromptText = act.prompt;
+      document.getElementById('promptTitle').textContent = act.label;
+      document.getElementById('promptText').textContent = act.prompt;
+      document.getElementById('promptNextStep').classList.remove('show');
+      const copyBtn = document.getElementById('promptCopyBtn');
+      copyBtn.textContent = '複製提示詞';
+      copyBtn.classList.remove('copied');
+      document.getElementById('promptOverlay').classList.add('show');
+    }
+
+    function copyPrompt() {
+      const copyBtn = document.getElementById('promptCopyBtn');
+      navigator.clipboard.writeText(currentPromptText).then(() => {
+        copyBtn.textContent = '已複製';
+        copyBtn.classList.add('copied');
+        document.getElementById('promptNextStep').classList.add('show');
       }).catch(() => {
-        // Fallback: show prompt in a textarea
-        const textarea = document.createElement('textarea');
-        textarea.value = act.prompt;
-        textarea.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:200px;z-index:999;font-size:14px;padding:12px;background:#1E293B;color:#CBD5E1;border:2px solid #60A5FA;';
-        document.body.appendChild(textarea);
-        textarea.select();
-        showToast(`「${act.label}」提示詞已顯示，請手動複製`);
-        setTimeout(() => textarea.remove(), 10000);
+        // Fallback: select text
+        const range = document.createRange();
+        range.selectNodeContents(document.getElementById('promptText'));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        copyBtn.textContent = '請手動 Cmd+C 複製';
       });
+    }
+
+    function closePromptPanel() {
+      document.getElementById('promptOverlay').classList.remove('show');
     }
 
     function buildSearchPrompt() {
