@@ -40,7 +40,7 @@
       "id": "c001",
       "title": "中南部廠房突然這麼搶手，到底是誰在買？",
       "source": "JLL 4Q25 台北商用不動產市場報告 + TechNews 台電用電申請暫緩",
-      "sourceUrl": "",
+      "sourceUrl": "https://technews.tw/2024/08/15/the-5mw-data-center-north-of-taoyuan-is-not-approved-for-supply",
       "pool": "①需求訊號",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -55,7 +55,7 @@
       "id": "c002",
       "title": "2026廠辦市場逆勢走強，背後是哪種客戶在買？",
       "source": "JLL 4Q25 台北商用不動產報告",
-      "sourceUrl": "",
+      "sourceUrl": "https://www.jll.com/zh-tw/newsroom/4q25-taipei-commercial-real-estate-market-report",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -83,7 +83,7 @@
       "id": "c004",
       "title": "竹科三期要徵地了，附近廠房地主現在該怎麼想？",
       "source": "JLL報告 + 台積電建廠盤點更新（vocus）",
-      "sourceUrl": "",
+      "sourceUrl": "https://vocus.cc/article/69958cfffd8978000145f44d",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "medium",
@@ -97,7 +97,7 @@
       "id": "c005",
       "title": "Q1廠房市場『一出就沒了』：什麼樣的廠房這麼搶？",
       "source": "TechNews 科技新報 2026-04-07《AI擴產引爆首季商用不動產衝千億》+ 自由電子報《836億廠房成交》",
-      "sourceUrl": "",
+      "sourceUrl": "https://finance.technews.tw/2026/04/07/commercial-real",
       "pool": "①需求訊號",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -111,7 +111,7 @@
       "id": "c006",
       "title": "台南高鐵站旁10萬坪工業地開放了，現在進場還算早嗎？",
       "source": "富比士地產王《鐵道局2026開春拋10萬坪震撼彈》+ 房市氣象台《高雄AI廊帶2026下半場走勢》",
-      "sourceUrl": "",
+      "sourceUrl": "https://www.fbs168.com/news/10122",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -145,7 +145,7 @@
       "biweekAxis": "工業不動產需求判讀",
       "status": "draft",
       "draftFile": "drafts/2026-04-12-central-south-factory-demand.md",
-      "publishUrl": ""
+      "publishUrl": "https://github.com/mac2good909777-commits/content-engine/blob/main/drafts/2026-04-12-central-south-factory-demand.md"
     }
   ],
   "kpi": {
