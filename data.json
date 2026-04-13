@@ -2,62 +2,32 @@
   "project": {
     "name": "每週內容引擎建置專案",
     "code": "CONTENT-ENGINE",
+    "brand": "睦聚開發",
+    "sheetId": "1KflbkG8pr1BIhR8_hXcFSCbZdWv-iGPsutNEVV8Ptoc",
     "startDate": "2026-04-14",
     "endDate": "2026-06-08",
     "totalWeeks": 8,
     "currentWeek": 1,
     "phase": "Phase 1",
     "light": "green",
+    "targetArticles": 8,
     "principle": "Costco 模式：少而準，長期建立信任"
   },
+  "lastUpdated": "2026-04-13",
   "weeklyStatus": {
     "currentStep": 4,
-    "stepLabels": [
-      "CCW 搜尋市場訊號",
-      "整理候選題庫",
-      "Mac + GPT 選題收斂",
-      "CCW 產出文章",
-      "Mac 審稿確認",
-      "發布"
-    ],
     "biweekTheme": "工業不動產需求判讀",
-    "notes": "Week 1 草稿產出完成。CCW 依最高優先選候選題①（中南部廠房搶手）。等待 Mac 審稿（Step 5）。"
+    "notes": "Week 1 草稿產出完成。CCW 依最高優先選候選題①（中南部廠房搶手）。等待 Mac 審稿。"
   },
   "searchStrategy": {
     "directions": [
-      {
-        "label": "需求訊號",
-        "desc": "客戶常問的問題、市場上反覆出現的需求模式",
-        "active": true
-      },
-      {
-        "label": "產業觀察",
-        "desc": "產業園區動態、重大投資案、政策變化",
-        "active": true
-      },
-      {
-        "label": "風險提醒",
-        "desc": "常見交易陷阱、法規變更、市場風險",
-        "active": true
-      },
-      {
-        "label": "協作解題",
-        "desc": "跨專業合作案例、仲介實務解法",
-        "active": false
-      },
-      {
-        "label": "案例故事",
-        "desc": "成功案例改寫、匿名情境分享",
-        "active": false
-      }
+      { "label": "需求訊號", "desc": "客戶常問的問題、市場上反覆出現的需求模式", "active": true },
+      { "label": "產業觀察", "desc": "產業園區動態、重大投資案、政策變化", "active": true },
+      { "label": "風險提醒", "desc": "常見交易陷阱、法規變更、市場風險", "active": true },
+      { "label": "協作解題", "desc": "跨專業合作案例、仲介實務解法", "active": false },
+      { "label": "案例故事", "desc": "成功案例改寫、匿名情境分享", "active": false }
     ],
-    "weeklyKeywords": [
-      "中南部廠房",
-      "台電暫緩申請",
-      "工業用地選址",
-      "科技供應鏈",
-      "廠房買方"
-    ],
+    "weeklyKeywords": ["中南部廠房", "台電暫緩申請", "工業用地選址", "科技供應鏈", "廠房買方"],
     "sources": [
       "591 廠房/土地近期刊登趨勢",
       "Google Trends 工業地產相關",
@@ -70,6 +40,7 @@
       "id": "c001",
       "title": "中南部廠房突然這麼搶手，到底是誰在買？",
       "source": "JLL 4Q25 台北商用不動產市場報告 + TechNews 台電用電申請暫緩",
+      "sourceUrl": "",
       "pool": "①需求訊號",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -84,6 +55,7 @@
       "id": "c002",
       "title": "2026廠辦市場逆勢走強，背後是哪種客戶在買？",
       "source": "JLL 4Q25 台北商用不動產報告",
+      "sourceUrl": "",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -97,6 +69,7 @@
       "id": "c003",
       "title": "買工業宅省了錢，那份「切結書」你簽了嗎？",
       "source": "住商不動產/中信房屋/TWProbe 工業宅風險彙整",
+      "sourceUrl": "",
       "pool": "③風險提醒",
       "theme": "工業不動產常見誤判",
       "priority": "medium",
@@ -110,6 +83,7 @@
       "id": "c004",
       "title": "竹科三期要徵地了，附近廠房地主現在該怎麼想？",
       "source": "JLL報告 + 台積電建廠盤點更新（vocus）",
+      "sourceUrl": "",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "medium",
@@ -123,6 +97,7 @@
       "id": "c005",
       "title": "Q1廠房市場『一出就沒了』：什麼樣的廠房這麼搶？",
       "source": "TechNews 科技新報 2026-04-07《AI擴產引爆首季商用不動產衝千億》+ 自由電子報《836億廠房成交》",
+      "sourceUrl": "",
       "pool": "①需求訊號",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -136,6 +111,7 @@
       "id": "c006",
       "title": "台南高鐵站旁10萬坪工業地開放了，現在進場還算早嗎？",
       "source": "富比士地產王《鐵道局2026開春拋10萬坪震撼彈》+ 房市氣象台《高雄AI廊帶2026下半場走勢》",
+      "sourceUrl": "",
       "pool": "②產業觀察",
       "theme": "工業不動產需求判讀",
       "priority": "high",
@@ -149,6 +125,7 @@
       "id": "c007",
       "title": "搶廠房的不只科技業：倉儲物流才是工業地產最大買方？",
       "source": "鉅亨網《五大產業積極擴廠》+ 商用不動產Q1市場報告",
+      "sourceUrl": "",
       "pool": "①需求訊號",
       "theme": "工業不動產需求判讀",
       "priority": "medium",
@@ -162,23 +139,13 @@
   "articles": [
     {
       "title": "中南部廠房突然這麼搶手，到底是誰在買？",
+      "createdDate": "2026-04-12",
       "publishDate": "",
       "theme": "需求訊號",
       "biweekAxis": "工業不動產需求判讀",
-      "channel": "",
-      "views": 0,
       "status": "draft",
       "draftFile": "drafts/2026-04-12-central-south-factory-demand.md",
-      "createdDate": "2026-04-12"
-    },
-    {
-      "title": "中南部廠房突然這麼搶手，到底是誰在買？",
-      "publishDate": "",
-      "theme": "需求訊號",
-      "channel": "",
-      "views": 0,
-      "status": "draft",
-      "draftFile": "2026-04-12-central-south-factory-demand.md"
+      "publishUrl": ""
     }
   ],
   "kpi": {
@@ -189,63 +156,50 @@
     "partnerInteractions": 0
   },
   "roles": {
-    "mac": {
-      "status": "review_pending",
-      "currentTask": "審稿 Week 1 草稿（Step 5）",
-      "lastActive": ""
-    },
-    "gpt": {
-      "status": "idle",
-      "currentTask": "",
-      "lastActive": ""
-    },
-    "cc": {
-      "status": "idle",
-      "currentTask": "",
-      "lastActive": ""
-    },
-    "ccw": {
-      "status": "active",
-      "currentTask": "搜尋市場訊號：新增候選題 c005/c006/c007（Week 2-3 用）",
-      "lastActive": "2026-04-12"
-    }
+    "mac": { "status": "review_pending", "currentTask": "審稿 Week 1 草稿", "lastActive": "" },
+    "gpt": { "status": "idle", "currentTask": "", "lastActive": "" },
+    "cc": { "status": "idle", "currentTask": "", "lastActive": "" },
+    "ccw": { "status": "active", "currentTask": "搜尋市場訊號：新增候選題 c005/c006/c007", "lastActive": "2026-04-12" }
   },
   "controlLog": [
     {
       "date": "2026-04-12",
       "type": "progress-report",
       "light": "green",
-      "summary": "【Week 0 進度追蹤 / Pre-Launch 最終確認】燈號：🟢 綠燈。Phase 0 全部完成。CCW 已完成 Step 0（市場訊號搜尋）+ Step 1（候選題庫整理）。候選題 4 篇：①中南部廠房搶手（需求訊號/HIGH）②廠辦逆勢走強（產業觀察/HIGH）③工業宅切結書（風險提醒/HIGH）④竹科三期徵地（產業觀察/MEDIUM）。現在移交 Mac + GPT 進行 Step 2 選題收斂（預計週二-三）。正式啟動：2026-04-14 Week 1。KPI: 文章 0/8，連續週 0。部署備註：GitHub Pages git push 需在 MM4 本機執行（VM 無法操作掛載磁碟的 git）。",
+      "summary": "【Week 0 進度追蹤】Phase 0 全部完成。候選題 4 篇。正式啟動：2026-04-14 Week 1。KPI: 文章 0/8，連續週 0。",
       "agent": "CCW"
     },
     {
       "date": "2026-04-12",
       "type": "draft-produced",
       "light": "green",
-      "summary": "【Week 1 草稿產出】CCW 自動執行 content-engine-write。無 selected 候選題，從 priority=high 選題①（中南部廠房搶手，需求訊號）。草稿產出：drafts/2026-04-12-central-south-factory-demand.md，約 950 字。currentStep 推進至 4（Mac 審稿）。",
+      "summary": "【Week 1 草稿產出】選題①中南部廠房搶手（需求訊號/HIGH）。草稿約 950 字。等待 Mac 審稿。",
       "agent": "CCW"
     },
     {
       "date": "2026-04-12",
       "type": "candidate-organize-review",
       "light": "green",
-      "summary": "【候選題庫整理補充 / content-engine-organize】補充執行：所有候選題加入 id/pool/ccwNote。優先級校正：c003「工業宅切結書」從 high 降為 medium（屬常見誤判主軸，留輪替第三週）。c001 已進入草稿確認正確。biweekTheme 已由前次任務設定。本任務無需改動 currentStep（已為 4）。題庫排序：drafted > high > medium。",
+      "summary": "【候選題庫整理】所有候選題加入 id/pool/ccwNote。c003 降為 medium（屬常見誤判主軸）。題庫排序：drafted > high > medium。",
       "agent": "CCW"
     },
     {
       "date": "2026-04-12",
       "type": "draft-created",
       "light": "green",
-      "summary": "【自動排程 content-engine-write】CCW 產出文章草稿：「中南部廠房突然這麼搶手，到底是誰在買？」（需求訊號/HIGH）。字數：1049 中文字。草稿存檔：drafts/2026-04-12-central-south-factory-demand.md。現移交 Mac 審稿確認（Step 4）。審稿三問：未講太深 ✅ 非教學文 ✅ 維持需求入口定位 ✅。",
+      "summary": "【自動排程產出】「中南部廠房突然這麼搶手」草稿 1049 字。審稿三問確認通過。移交 Mac 審稿。",
       "agent": "CCW-scheduled"
     },
     {
       "date": "2026-04-12",
       "type": "market-search",
       "light": "green",
-      "summary": "【自動排程 content-engine-search】搜尋台灣工業地產市場訊號。關鍵字：中南部廠房/台電暫緩申請/工業用地選址/科技供應鏈/廠房買方。新增候選題3篇：c005「Q1廠房一出就沒了」（需求訊號/HIGH，2026Q1廠房836億、無塵室即搶即售稀缺行情）；c006「台南高鐵站旁10萬坪工業地開放」（產業觀察/HIGH，S廊帶AI廊帶鐵道局拋地）；c007「物流業才是工業地產最大買方」（需求訊號/MEDIUM，五大產業廠房需求結構解析）。Week 1 currentStep 保持 4（Mac 審稿中，不覆蓋）。候選題庫合計 7 篇。",
+      "summary": "【自動排程搜尋】新增候選題 3 篇：c005（Q1廠房836億稀缺行情）、c006（台南高鐵站10萬坪工業地）、c007（物流業最大買方）。候選題庫合計 7 篇。",
       "agent": "CCW-scheduled"
     }
   ],
-  "lastUpdated": "2026-04-12"
+  "chatgptPrompt": {
+    "researchSummary": "",
+    "prompt": ""
+  }
 }

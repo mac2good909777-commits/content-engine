@@ -1,1807 +1,426 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>每週內容引擎 | 睦聚開發 數據儀表板</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-page: #0F172A;
-      --bg-card: #1E293B;
-      --bg-header: #0B1120;
-      --blue-bright: #60A5FA;
-      --gold-accent: #FBBF24;
-      --text-body: #CBD5E1;
-      --text-muted: #64748B;
-      --green-up: #4ADE80;
-      --red-down: #F87171;
-      --border-grid: #334155;
-      --highlight-row: rgba(96,165,250,0.08);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: var(--bg-page);
-      color: var(--text-body);
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* ─── Header ─── */
-    .header {
-      background: var(--bg-header);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-
-    .header-title {
-      flex: 1;
-    }
-
-    .header-title h1 {
-      font-size: 28px;
-      font-weight: 700;
-      color: #F1F5F9;
-      margin-bottom: 4px;
-      font-family: 'Noto Sans TC', sans-serif;
-    }
-
-    .header-title p {
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .header-info {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      font-size: 13px;
-    }
-
-    .header-info-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .header-info-label {
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .header-info-value {
-      font-family: 'JetBrains Mono', 'Courier New', monospace;
-      color: var(--blue-bright);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .light-indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .light-indicator.green {
-      background-color: var(--green-up);
-      box-shadow: 0 0 8px var(--green-up);
-    }
-
-    .light-indicator.yellow {
-      background-color: var(--gold-accent);
-      box-shadow: 0 0 8px var(--gold-accent);
-    }
-
-    .light-indicator.red {
-      background-color: var(--red-down);
-      box-shadow: 0 0 8px var(--red-down);
-    }
-
-    /* ─── KPI Cards ─── */
-    .kpi-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .kpi-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .kpi-card.editable { cursor: pointer; transition: border-color 0.2s; }
-    .kpi-card.editable:hover { border-color: var(--blue-bright); }
-    .kpi-card.auto { position: relative; }
-    .kpi-card.auto::after {
-      content: 'AUTO';
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      font-size: 8px;
-      letter-spacing: 1px;
-      color: var(--green-up);
-      opacity: 0.6;
-    }
-
-    .kpi-number {
-      font-family: 'JetBrains Mono', 'Courier New', monospace;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--blue-bright);
-      margin-bottom: 8px;
-    }
-
-    .kpi-label {
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .kpi-edit-hint {
-      font-size: 9px;
-      color: var(--text-muted);
-      opacity: 0;
-      transition: opacity 0.2s;
-      margin-top: 4px;
-    }
-
-    .kpi-card.editable:hover .kpi-edit-hint { opacity: 1; }
-
-    .kpi-inline-input {
-      background: var(--bg-page);
-      border: 1px solid var(--blue-bright);
-      border-radius: 4px;
-      color: var(--blue-bright);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 28px;
-      font-weight: 700;
-      text-align: center;
-      width: 80px;
-      padding: 4px;
-      outline: none;
-    }
-
-    /* ─── Workflow Section ─── */
-    .section-title {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #F1F5F9;
-      margin-bottom: 16px;
-      margin-top: 24px;
-    }
-
-    .workflow-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .workflow-steps {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .workflow-step {
-      flex: 1;
-      min-width: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .workflow-step-circle {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-      transition: all 0.3s ease;
-    }
-
-    .workflow-step-circle.pending {
-      background-color: var(--border-grid);
-      color: var(--text-muted);
-      border: 2px solid var(--border-grid);
-    }
-
-    .workflow-step-circle.active {
-      background-color: var(--blue-bright);
-      color: var(--bg-page);
-      border: 2px solid var(--blue-bright);
-      box-shadow: 0 0 16px var(--blue-bright);
-    }
-
-    .workflow-step-circle.completed {
-      background-color: var(--green-up);
-      color: var(--bg-page);
-      border: 2px solid var(--green-up);
-    }
-
-    .workflow-step-label {
-      font-size: 11px;
-      text-align: center;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .workflow-arrow {
-      flex-shrink: 0;
-      width: 20px;
-      height: 2px;
-      background-color: var(--border-grid);
-      margin-bottom: 38px;
-    }
-
-    /* ─── Search Strategy ─── */
-    .strategy-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .strategy-directions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .direction-card {
-      border: 1px solid var(--border-grid);
-      border-radius: 6px;
-      padding: 14px;
-      cursor: default;
-      transition: all 0.2s ease;
-    }
-
-    .direction-card.active {
-      border-color: var(--blue-bright);
-      background: rgba(96, 165, 250, 0.06);
-    }
-
-    .direction-card.inactive {
-      opacity: 0.4;
-    }
-
-    .direction-label {
-      font-weight: 700;
-      font-size: 13px;
-      color: #F1F5F9;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .direction-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .direction-dot.on { background: var(--green-up); box-shadow: 0 0 6px var(--green-up); }
-    .direction-dot.off { background: var(--border-grid); }
-
-    .direction-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .keyword-section {
-      margin-bottom: 20px;
-    }
-
-    .keyword-section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .keyword-section-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .keyword-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .keyword-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background: rgba(251, 191, 36, 0.12);
-      border: 1px solid rgba(251, 191, 36, 0.3);
-      border-radius: 16px;
-      font-size: 12px;
-      color: var(--gold-accent);
-      font-weight: 500;
-    }
-
-    .keyword-tag .remove-tag {
-      cursor: pointer;
-      font-size: 14px;
-      opacity: 0.7;
-      transition: opacity 0.15s;
-    }
-
-    .keyword-tag .remove-tag:hover {
-      opacity: 1;
-    }
-
-    .keyword-input-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .keyword-input {
-      flex: 1;
-      padding: 8px 14px;
-      background: var(--bg-page);
-      border: 1px solid var(--border-grid);
-      border-radius: 6px;
-      color: var(--text-body);
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .keyword-input:focus {
-      border-color: var(--blue-bright);
-    }
-
-    .keyword-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .btn-add {
-      padding: 8px 16px;
-      background: var(--blue-bright);
-      border: none;
-      border-radius: 6px;
-      color: var(--bg-page);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-
-    .btn-add:hover {
-      background: #93C5FD;
-    }
-
-    .source-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .source-chip {
-      padding: 5px 10px;
-      border: 1px solid var(--border-grid);
-      border-radius: 4px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* ─── Action Buttons ─── */
-    .action-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .action-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .action-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      background: var(--bg-page);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: left;
-    }
-
-    .action-btn:hover {
-      border-color: var(--blue-bright);
-      background: rgba(96, 165, 250, 0.06);
-    }
-
-    .action-btn:active {
-      transform: scale(0.98);
-    }
-
-    .action-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-      font-weight: 700;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .action-icon.search { background: rgba(96,165,250,0.15); color: var(--blue-bright); }
-    .action-icon.track { background: rgba(251,191,36,0.15); color: var(--gold-accent); }
-    .action-icon.write { background: rgba(74,222,128,0.15); color: var(--green-up); }
-    .action-icon.export { background: rgba(248,113,113,0.15); color: var(--red-down); }
-
-    .action-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #F1F5F9;
-      margin-bottom: 2px;
-    }
-
-    .action-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .action-task-id {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--blue-bright);
-      opacity: 0.6;
-      margin-top: 4px;
-    }
-
-    .action-toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #F1F5F9;
-      background: var(--bg-card);
-      border: 1px solid var(--blue-bright);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-      transform: translateY(80px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 100;
-    }
-
-    .action-toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* ─── Prompt Panel ─── */
-    .prompt-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 200;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-    }
-
-    .prompt-overlay.show {
-      display: flex;
-    }
-
-    .prompt-panel {
-      background: var(--bg-card);
-      border: 1px solid var(--blue-bright);
-      border-radius: 12px;
-      max-width: 640px;
-      width: 100%;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-    }
-
-    .prompt-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-grid);
-    }
-
-    .prompt-panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #F1F5F9;
-    }
-
-    .prompt-panel-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.15s;
-    }
-
-    .prompt-panel-close:hover {
-      color: #F1F5F9;
-      background: rgba(255,255,255,0.1);
-    }
-
-    .prompt-panel-body {
-      padding: 20px;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .prompt-text {
-      font-family: 'JetBrains Mono', 'Courier New', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-body);
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: var(--bg-page);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .prompt-panel-footer {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      padding: 16px 20px;
-      border-top: 1px solid var(--border-grid);
-    }
-
-    .btn-copy {
-      padding: 10px 24px;
-      background: var(--blue-bright);
-      border: none;
-      border-radius: 6px;
-      color: var(--bg-page);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-copy:hover { background: #93C5FD; }
-
-    .btn-copy.copied {
-      background: var(--green-up);
-    }
-
-    .btn-cancel {
-      padding: 10px 20px;
-      background: transparent;
-      border: 1px solid var(--border-grid);
-      border-radius: 6px;
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-cancel:hover { border-color: var(--text-muted); color: var(--text-body); }
-
-    .prompt-next-step {
-      margin-top: 16px;
-      padding: 12px 16px;
-      background: rgba(251,191,36,0.08);
-      border: 1px solid rgba(251,191,36,0.2);
-      border-radius: 8px;
-      font-size: 12px;
-      color: var(--gold-accent);
-      line-height: 1.6;
-      display: none;
-    }
-
-    .prompt-next-step.show { display: block; }
-
-    /* ─── Role Status ─── */
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .role-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .role-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .role-name {
-      font-weight: 700;
-      color: #F1F5F9;
-      text-transform: uppercase;
-      font-size: 12px;
-      letter-spacing: 1px;
-      flex: 1;
-    }
-
-    .role-badge {
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .role-badge.active {
-      background-color: rgba(74, 222, 128, 0.2);
-      color: var(--green-up);
-    }
-
-    .role-badge.idle {
-      background-color: rgba(100, 116, 139, 0.2);
-      color: var(--text-muted);
-    }
-
-    .role-badge.blocked {
-      background-color: rgba(248, 113, 113, 0.2);
-      color: var(--red-down);
-    }
-
-    .role-detail {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .role-detail label {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--text-muted);
-      font-size: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .role-detail-value {
-      color: var(--text-body);
-      margin-bottom: 8px;
-      word-break: break-word;
-    }
-
-    /* ─── Candidates Table ─── */
-    .table-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 24px;
-    }
-
-    .table-filters {
-      padding: 16px;
-      border-bottom: 1px solid var(--border-grid);
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border-grid);
-      background: transparent;
-      color: var(--text-body);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s ease;
-    }
-
-    .filter-btn:hover {
-      border-color: var(--blue-bright);
-      color: var(--blue-bright);
-    }
-
-    .filter-btn.active {
-      background-color: var(--blue-bright);
-      border-color: var(--blue-bright);
-      color: var(--bg-page);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    th {
-      background-color: var(--bg-header);
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      color: #F1F5F9;
-      border-bottom: 1px solid var(--border-grid);
-      font-size: 11px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-grid);
-      color: var(--text-body);
-    }
-
-    tr:hover {
-      background-color: var(--highlight-row);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .status-badge.clickable {
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .status-badge.clickable:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 8px rgba(96,165,250,0.3);
-    }
-
-    .status-badge.draft {
-      background-color: rgba(100, 116, 139, 0.2);
-      color: var(--text-muted);
-    }
-
-    .status-badge.review {
-      background-color: rgba(251, 191, 36, 0.2);
-      color: var(--gold-accent);
-    }
-
-    .status-badge.published {
-      background-color: rgba(74, 222, 128, 0.2);
-      color: var(--green-up);
-    }
-
-    .theme-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      background-color: rgba(96, 165, 250, 0.15);
-      color: var(--blue-bright);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-muted);
-    }
-
-    .empty-state p {
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    /* ─── Rules Section ─── */
-    .rules-container {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .rule-item {
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-grid);
-    }
-
-    .rule-item:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .rule-title {
-      font-weight: 600;
-      color: var(--blue-bright);
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-
-    .rule-content {
-      font-size: 13px;
-      color: var(--text-body);
-      line-height: 1.6;
-    }
-
-    /* ─── Control Log ─── */
-    .timeline {
-      background: var(--bg-card);
-      border: 1px solid var(--border-grid);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .timeline-item {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border-grid);
-    }
-
-    .timeline-item:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .timeline-marker {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: var(--border-grid);
-      border: 2px solid var(--blue-bright);
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--blue-bright);
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .timeline-content {
-      flex: 1;
-    }
-
-    .timeline-date {
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .timeline-type {
-      display: inline-block;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 3px;
-      background-color: rgba(96, 165, 250, 0.15);
-      color: var(--blue-bright);
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .timeline-summary {
-      font-size: 13px;
-      color: var(--text-body);
-      line-height: 1.6;
-    }
-
-    /* ─── Loading & Error ─── */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
-    }
-
-    .error-message {
-      background-color: rgba(248, 113, 113, 0.1);
-      border: 1px solid var(--red-down);
-      color: var(--red-down);
-      padding: 16px;
-      border-radius: 8px;
-      margin-bottom: 24px;
-      font-size: 13px;
-    }
-
-    /* ─── Responsive ─── */
-    @media (max-width: 768px) {
-      .container {
-        padding: 12px;
-      }
-
-      .header {
-        padding: 16px;
-      }
-
-      .header-top {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .header-info {
-        gap: 16px;
-      }
-
-      .kpi-row {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      }
-
-      .workflow-steps {
-        gap: 8px;
-      }
-
-      .workflow-step {
-        min-width: 90px;
-      }
-
-      .workflow-step-circle {
-        width: 40px;
-        height: 40px;
-        font-size: 12px;
-      }
-
-      .workflow-arrow {
-        display: none;
-      }
-
-      table {
-        font-size: 12px;
-      }
-
-      th, td {
-        padding: 8px 12px;
-      }
-
-      .role-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>內容引擎控制台｜睦聚開發</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #0F172A;
+  --card:  #1E293B;
+  --hdr:   #0B1120;
+  --bdr:   #334155;
+  --blue:  #60A5FA;
+  --gold:  #FBBF24;
+  --text:  #CBD5E1;
+  --muted: #64748B;
+  --green: #4ADE80;
+  --red:   #F87171;
+  --font:  "Noto Sans TC","Microsoft JhengHei",sans-serif;
+  --mono:  "JetBrains Mono","Fira Code",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ── 頁首 ── */
+.header{background:var(--hdr);border-bottom:1px solid var(--bdr);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.brand{display:flex;align-items:center;gap:12px}
+.dot{width:10px;height:10px;background:var(--blue);border-radius:50%;box-shadow:0 0 8px var(--blue)}
+.brand-name{font-size:11px;color:var(--muted);letter-spacing:2px}
+.proj-name{font-size:18px;font-weight:700;color:#F1F5F9;margin-top:2px}
+.meta{text-align:right}
+.meta-label{font-size:11px;color:var(--muted)}
+.meta-val{font-family:var(--mono);font-size:13px;color:var(--blue)}
+
+/* ── 版面 ── */
+.wrap{max-width:1200px;margin:0 auto;padding:24px 20px}
+.sec{margin-bottom:28px}
+.sec-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+
+/* ── 本週狀態列 ── */
+.status-bar{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:14px 20px;display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.tl{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.tl-g{background:var(--green);box-shadow:0 0 8px var(--green)}
+.tl-y{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.tl-r{background:var(--red);box-shadow:0 0 8px var(--red)}
+.tl-x{background:var(--muted)}
+.sw{font-family:var(--mono);font-size:12px;color:var(--blue);min-width:60px}
+.ss{color:var(--text);flex:1}
+.st{font-size:12px;color:var(--gold)}
+
+/* ── KPI 卡片 ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px 20px}
+.kpi-lbl{font-size:12px;color:var(--muted);margin-bottom:8px}
+.kpi-val{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--blue);line-height:1}
+.kpi-unit{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* ── 搜尋策略 ── */
+.strat-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.strat-lbl{font-size:11px;color:var(--muted);margin-bottom:6px}
+.strat-val{color:#F1F5F9;font-size:14px}
+.kw-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.kw{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.3);border-radius:4px;padding:2px 8px;font-size:12px;font-family:var(--mono)}
+
+/* ── 表格 ── */
+.tbl-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{background:#0F172A}
+th{padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-align:left;border-bottom:1px solid var(--bdr)}
+td{padding:10px 14px;border-bottom:1px solid rgba(51,65,85,.5);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(96,165,250,.05)}
+.empty td{text-align:center;color:var(--muted);padding:32px}
+
+/* ── 標籤 Badge ── */
+.badge{display:inline-block;border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700}
+.b-new{background:rgba(96,165,250,.12);color:var(--blue)}
+.b-sel{background:rgba(74,222,128,.12);color:var(--green)}
+.b-rej{background:rgba(248,113,113,.12);color:var(--red)}
+.b-dft{background:rgba(100,116,139,.15);color:var(--muted)}
+.b-rev{background:rgba(251,191,36,.12);color:var(--gold)}
+.b-pub{background:rgba(74,222,128,.12);color:var(--green)}
+.p-hi{background:rgba(248,113,113,.15);color:var(--red)}
+.p-md{background:rgba(251,191,36,.12);color:var(--gold)}
+.p-lo{background:rgba(100,116,139,.15);color:var(--muted)}
+
+/* ── 連結 ── */
+a.lnk{color:var(--blue);text-decoration:none;font-size:12px;opacity:.85}
+a.lnk:hover{opacity:1;text-decoration:underline}
+
+/* ── 可折疊區塊 ── */
+.col-hdr{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;margin-bottom:12px}
+.col-hdr .sec-title{margin-bottom:0;flex:1}
+.col-btn{font-size:11px;color:var(--muted);background:rgba(51,65,85,.5);border:1px solid var(--bdr);border-radius:4px;padding:2px 8px;cursor:pointer;white-space:nowrap}
+.col-hdr:hover .col-btn{color:var(--blue)}
+.col-body{overflow:hidden;transition:max-height .3s ease}
+.col-body.closed{max-height:0!important}
+
+/* ── 訊號文字 ── */
+.sig{font-size:12px;color:var(--text);line-height:1.5;max-width:280px}
+
+/* ── 提示詞區塊 ── */
+.prompt-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.prompt-hdr{padding:12px 20px;background:#0F172A;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.prompt-title{font-size:13px;font-weight:700;color:var(--gold)}
+.copy-btn{background:rgba(251,191,36,.12);color:var(--gold);border:1px solid rgba(251,191,36,.3);border-radius:4px;padding:4px 12px;font-size:12px;font-family:var(--mono);cursor:pointer}
+.copy-btn:hover{background:rgba(251,191,36,.22)}
+.copy-btn.ok{color:var(--green);border-color:var(--green);background:rgba(74,222,128,.1)}
+.prompt-sum{padding:14px 20px;border-bottom:1px solid var(--bdr);font-size:13px;line-height:1.7;white-space:pre-wrap}
+.prompt-body{padding:14px 20px;font-family:var(--mono);font-size:12px;color:var(--blue);white-space:pre-wrap;line-height:1.7;max-height:240px;overflow-y:auto}
+.prompt-empty{padding:32px 20px;text-align:center;color:var(--muted)}
+
+/* ── 頁尾 ── */
+.footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;font-family:var(--mono);border-top:1px solid var(--bdr);margin-top:32px}
+
+/* ── RWD ── */
+@media(max-width:768px){
+  .strat-card{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .header{flex-direction:column;align-items:flex-start;gap:8px}
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <div class="header-top">
-        <div class="header-title">
-          <h1>每週內容引擎</h1>
-          <p>睦聚開發 × 數據儀表板</p>
-        </div>
-        <div style="text-align: right;">
-          <div style="margin-bottom: 8px;">
-            <span class="light-indicator" id="lightIndicator"></span>
-            <span id="lightStatus" style="font-size: 13px;">--</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="header-info">
-        <div class="header-info-item">
-          <span class="header-info-label">Project Code</span>
-          <span class="header-info-value" id="projectCode">--</span>
-        </div>
-        <div class="header-info-item">
-          <span class="header-info-label">Start Date</span>
-          <span class="header-info-value" id="startDate">--</span>
-        </div>
-        <div class="header-info-item">
-          <span class="header-info-label">End Date</span>
-          <span class="header-info-value" id="endDate">--</span>
-        </div>
-        <div class="header-info-item">
-          <span class="header-info-label">Total Weeks</span>
-          <span class="header-info-value" id="totalWeeks">--</span>
-        </div>
-        <div class="header-info-item">
-          <span class="header-info-label">Current Week</span>
-          <span class="header-info-value" id="currentWeek">--</span>
-        </div>
-        <div class="header-info-item">
-          <span class="header-info-label">Phase</span>
-          <span class="header-info-value" id="phase">--</span>
-        </div>
-      </div>
+<!-- 頁首 -->
+<header class="header">
+  <div class="brand">
+    <div class="dot"></div>
+    <div>
+      <div class="brand-name">睦聚開發 · 內容引擎</div>
+      <div class="proj-name">每週內容控制台</div>
     </div>
+  </div>
+  <div class="meta">
+    <div class="meta-label">最後更新</div>
+    <div class="meta-val" id="lastUpdated">—</div>
+  </div>
+</header>
 
-    <!-- KPI Cards -->
-    <div class="kpi-row">
-      <div class="kpi-card auto">
-        <div class="kpi-number"><span id="totalArticlesNum">0</span>/<span id="targetArticlesNum">0</span></div>
-        <div class="kpi-label">已發布文章</div>
-      </div>
-      <div class="kpi-card auto">
-        <div class="kpi-number" id="consecutiveWeeksNum">0</div>
-        <div class="kpi-label">連續產出週數</div>
-      </div>
-      <div class="kpi-card editable" onclick="editKPI('inquiries')">
-        <div class="kpi-number" id="inquiriesNum">0</div>
-        <div class="kpi-label">諮詢/互動</div>
-        <div class="kpi-edit-hint">點擊編輯</div>
-      </div>
-      <div class="kpi-card editable" onclick="editKPI('partnerInteractions')">
-        <div class="kpi-number" id="partnerInteractionsNum">0</div>
-        <div class="kpi-label">同業互動</div>
-        <div class="kpi-edit-hint">點擊編輯</div>
-      </div>
-    </div>
+<div class="wrap">
 
-    <!-- Workflow Visualization -->
-    <div class="section-title">6步驟生產流程</div>
-    <div class="workflow-container">
-      <div class="workflow-steps" id="workflowSteps"></div>
-    </div>
-
-    <!-- Search Strategy -->
-    <div class="section-title">搜尋方向策略</div>
-    <div class="strategy-container">
-      <div class="strategy-directions" id="strategyDirections"></div>
-
-      <div class="keyword-section">
-        <div class="keyword-section-header">
-          <span class="keyword-section-title">本週搜尋關鍵字 / 大方向</span>
-        </div>
-        <div class="keyword-tags" id="keywordTags"></div>
-        <div class="keyword-input-row">
-          <input type="text" class="keyword-input" id="keywordInput" placeholder="輸入關鍵字或方向，按 Enter 加入..." />
-          <button class="btn-add" id="addKeywordBtn">加入</button>
-        </div>
-      </div>
-
-      <div class="keyword-section">
-        <div class="keyword-section-header">
-          <span class="keyword-section-title">資料來源</span>
-        </div>
-        <div class="source-list" id="sourceList"></div>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="section-title">主動觸發</div>
-    <div class="action-panel">
-      <div class="action-grid">
-        <div class="action-btn" onclick="triggerAction('search')">
-          <div class="action-icon search">S</div>
-          <div>
-            <div class="action-label">搜尋市場訊號</div>
-            <div class="action-desc">根據本週關鍵字搜尋最新訊號，整理進候選題庫</div>
-            <div class="action-task-id">content-engine-search</div>
-          </div>
-        </div>
-        <div class="action-btn" onclick="triggerAction('organize')">
-          <div class="action-icon track">O</div>
-          <div>
-            <div class="action-label">整理候選題庫</div>
-            <div class="action-desc">篩選、排序、標記優先級，準備給 Mac 選題</div>
-            <div class="action-task-id">content-engine-organize</div>
-          </div>
-        </div>
-        <div class="action-btn" onclick="triggerAction('write')">
-          <div class="action-icon write">W</div>
-          <div>
-            <div class="action-label">產出文章草稿</div>
-            <div class="action-desc">從已選定題目產出初稿，送審</div>
-            <div class="action-task-id">content-engine-write</div>
-          </div>
-        </div>
-        <div class="action-btn" onclick="triggerAction('progress')">
-          <div class="action-icon export">P</div>
-          <div>
-            <div class="action-label">進度追蹤報告</div>
-            <div class="action-desc">燈號判斷、KPI 計算、本週工作總結</div>
-            <div class="action-task-id">content-engine-progress</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="action-toast" id="actionToast"></div>
-
-    <!-- Prompt Overlay Panel -->
-    <div class="prompt-overlay" id="promptOverlay" onclick="if(event.target===this)closePromptPanel()">
-      <div class="prompt-panel">
-        <div class="prompt-panel-header">
-          <span class="prompt-panel-title" id="promptTitle"></span>
-          <button class="prompt-panel-close" onclick="closePromptPanel()">×</button>
-        </div>
-        <div class="prompt-panel-body">
-          <div class="prompt-text" id="promptText"></div>
-          <div class="prompt-next-step" id="promptNextStep">
-            複製成功 — 兩種觸發方式：<br>
-            <strong>A.</strong> CCW 側邊欄「Scheduled」→ 找到對應任務 → Run now<br>
-            <strong>B.</strong> 在 CCW 對話中貼上這段提示詞
-          </div>
-        </div>
-        <div class="prompt-panel-footer">
-          <button class="btn-cancel" onclick="closePromptPanel()">取消</button>
-          <button class="btn-copy" id="promptCopyBtn" onclick="copyPrompt()">複製提示詞</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Role Status -->
-    <div class="section-title">角色狀態</div>
-    <div class="role-grid" id="roleGrid"></div>
-
-    <!-- Candidates Section -->
-    <div class="section-title">候選題庫</div>
-    <div class="table-container">
-      <div class="table-filters" id="themeFilters"></div>
-      <div id="candidatesTable"></div>
-    </div>
-
-    <!-- Articles Section -->
-    <div class="section-title">文章列表</div>
-    <div class="table-container">
-      <div id="articlesTable"></div>
-    </div>
-
-    <!-- Rules Section -->
-    <div class="section-title">守則提醒</div>
-    <div class="rules-container">
-      <div class="rule-item">
-        <div class="rule-title">Costco 模式</div>
-        <div class="rule-content">少而準，長期建立信任</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-title">審稿三問</div>
-        <div class="rule-content">講太深？太像教學？維持需求入口定位？</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-title">雙週主軸輪替</div>
-        <div class="rule-content">需求判讀 / 資產解題 / 常見誤判 / 協作整合</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-title">停損機制</div>
-        <div class="rule-content">連 2 週未產出 → 黃燈；連 3 週 → 紅燈</div>
-      </div>
-    </div>
-
-    <!-- Control Log -->
-    <div class="section-title">控場紀錄</div>
-    <div class="timeline" id="controlLog"></div>
+  <!-- 本週狀態 -->
+  <div class="status-bar">
+    <div class="tl tl-x" id="tlDot"></div>
+    <span class="sw" id="swTxt">第 — 週</span>
+    <span class="ss" id="ssTxt">載入中…</span>
+    <span class="st" id="stTxt"></span>
   </div>
 
-  <script>
-    // Load data
-    let dashboardData = null;
+  <!-- KPI -->
+  <div class="sec">
+    <div class="sec-title">📊 本季 KPI</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-lbl">已發布文章</div>
+        <div class="kpi-val" id="kpPub">0</div>
+        <div class="kpi-unit">篇（目標 <span id="kpTgt">8</span> 篇）</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">連續產出週數</div>
+        <div class="kpi-val" id="kpWk">0</div>
+        <div class="kpi-unit">週</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">諮詢 / 互動</div>
+        <div class="kpi-val" id="kpCo">0</div>
+        <div class="kpi-unit">次</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-lbl">合作夥伴互動</div>
+        <div class="kpi-val" id="kpPa">0</div>
+        <div class="kpi-unit">次</div>
+      </div>
+    </div>
+  </div>
 
-    async function loadData() {
-      try {
-        const response = await fetch('data.json');
-        if (!response.ok) {
-          throw new Error('Failed to load data.json');
-        }
-        dashboardData = await response.json();
-        renderDashboard();
-      } catch (error) {
-        console.error('Error loading data:', error);
-        dashboardData = getEmptyData();
-        renderDashboard();
-      }
-    }
+  <!-- 搜尋策略 -->
+  <div class="sec">
+    <div class="sec-title">🔍 本週搜尋策略</div>
+    <div class="strat-card">
+      <div>
+        <div class="strat-lbl">雙週主軸</div>
+        <div class="strat-val" id="sAxis">—</div>
+      </div>
+      <div>
+        <div class="strat-lbl">方向主題</div>
+        <div class="strat-val" id="sDirs">—</div>
+      </div>
+      <div>
+        <div class="strat-lbl">本週關鍵字</div>
+        <div class="kw-wrap" id="sKws"><span style="color:var(--muted)">—</span></div>
+      </div>
+    </div>
+  </div>
 
-    function getEmptyData() {
-      return {
-        project: {
-          name: "每週內容引擎建置專案",
-          code: "CONTENT-ENGINE",
-          startDate: "--",
-          endDate: "--",
-          totalWeeks: 0,
-          currentWeek: 0,
-          phase: "Phase 0",
-          light: "gray",
-          principle: "Costco 模式：少而準，長期建立信任"
-        },
-        weeklyStatus: {
-          currentStep: 0,
-          stepLabels: [
-            "CCW 搜尋市場訊號",
-            "整理候選題庫",
-            "Mac + GPT 選題收斂",
-            "CCW 產出文章",
-            "Mac 審稿確認",
-            "發布"
-          ],
-          biweekTheme: "",
-          notes: ""
-        },
-        candidates: [],
-        articles: [],
-        kpi: {
-          totalArticles: 0,
-          targetArticles: 8,
-          consecutiveWeeks: 0,
-          inquiries: 0,
-          partnerInteractions: 0
-        },
-        roles: {
-          mac: { status: "idle", currentTask: "", lastActive: "" },
-          gpt: { status: "idle", currentTask: "", lastActive: "" },
-          cc: { status: "idle", currentTask: "", lastActive: "" },
-          ccw: { status: "idle", currentTask: "", lastActive: "" }
-        },
-        controlLog: [],
-        lastUpdated: new Date().toISOString().split('T')[0]
-      };
-    }
-
-    function renderDashboard() {
-      try { renderHeader(); } catch(e) { console.error('renderHeader:', e); }
-      try { renderKPI(); } catch(e) { console.error('renderKPI:', e); }
-      try { renderWorkflow(); } catch(e) { console.error('renderWorkflow:', e); }
-      try { renderSearchStrategy(); } catch(e) { console.error('renderSearchStrategy:', e); }
-      try { renderRoles(); } catch(e) { console.error('renderRoles:', e); }
-      try { renderCandidates(); } catch(e) { console.error('renderCandidates:', e); }
-      try { renderArticles(); } catch(e) { console.error('renderArticles:', e); }
-      try { renderControlLog(); } catch(e) { console.error('renderControlLog:', e); }
-      try { initKeywordInput(); } catch(e) { console.error('initKeywordInput:', e); }
-    }
-
-    function renderHeader() {
-      const { project } = dashboardData;
-      document.getElementById('projectCode').textContent = project.code || '--';
-      document.getElementById('startDate').textContent = formatDate(project.startDate);
-      document.getElementById('endDate').textContent = formatDate(project.endDate);
-      document.getElementById('totalWeeks').textContent = project.totalWeeks || '--';
-      document.getElementById('currentWeek').textContent = project.currentWeek || '0';
-      document.getElementById('phase').textContent = project.phase || '--';
-
-      const lightIndicator = document.getElementById('lightIndicator');
-      const lightStatus = document.getElementById('lightStatus');
-      const light = project.light || 'gray';
-      lightIndicator.className = `light-indicator ${light}`;
-      lightStatus.textContent = light.toUpperCase();
-    }
-
-    function renderKPI() {
-      const { kpi, articles } = dashboardData;
-
-      // Auto-calculate: published articles count
-      const publishedCount = (articles || []).filter(a => a.status === 'published').length;
-      kpi.totalArticles = publishedCount;
-
-      // Auto-calculate: consecutive weeks with output
-      kpi.consecutiveWeeks = calcConsecutiveWeeks(articles || []);
-
-      document.getElementById('totalArticlesNum').textContent = kpi.totalArticles;
-      document.getElementById('targetArticlesNum').textContent = kpi.targetArticles || '8';
-      document.getElementById('consecutiveWeeksNum').textContent = kpi.consecutiveWeeks;
-      document.getElementById('inquiriesNum').textContent = kpi.inquiries || '0';
-      document.getElementById('partnerInteractionsNum').textContent = kpi.partnerInteractions || '0';
-    }
-
-    function calcConsecutiveWeeks(articles) {
-      const published = articles.filter(a => a.status === 'published' && a.publishDate);
-      if (published.length === 0) return 0;
-      // Get unique weeks with published articles
-      const weeks = new Set(published.map(a => {
-        const d = new Date(a.publishDate);
-        const startOfYear = new Date(d.getFullYear(), 0, 1);
-        return Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
-      }));
-      // Count backwards from latest week
-      const sorted = [...weeks].sort((a, b) => b - a);
-      let count = 1;
-      for (let i = 1; i < sorted.length; i++) {
-        if (sorted[i] === sorted[i - 1] - 1) count++;
-        else break;
-      }
-      return count;
-    }
-
-    function editKPI(field) {
-      const el = document.getElementById(field === 'inquiries' ? 'inquiriesNum' : 'partnerInteractionsNum');
-      const current = parseInt(el.textContent) || 0;
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.value = current;
-      input.className = 'kpi-inline-input';
-      input.min = 0;
-      el.innerHTML = '';
-      el.appendChild(input);
-      input.focus();
-      input.select();
-
-      function save() {
-        const val = Math.max(0, parseInt(input.value) || 0);
-        dashboardData.kpi[field] = val;
-        el.textContent = val;
-        saveDataJson();
-      }
-      input.addEventListener('blur', save);
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); save(); } });
-    }
-
-    function renderWorkflow() {
-      const { weeklyStatus } = dashboardData;
-      const container = document.getElementById('workflowSteps');
-      container.innerHTML = '';
-
-      weeklyStatus.stepLabels.forEach((label, index) => {
-        const status = index < weeklyStatus.currentStep ? 'completed' : (index === weeklyStatus.currentStep ? 'active' : 'pending');
-
-        const step = document.createElement('div');
-        step.className = 'workflow-step';
-
-        const circle = document.createElement('div');
-        circle.className = `workflow-step-circle ${status}`;
-        circle.textContent = index + 1;
-
-        const labelEl = document.createElement('div');
-        labelEl.className = 'workflow-step-label';
-        labelEl.textContent = label;
-
-        step.appendChild(circle);
-        step.appendChild(labelEl);
-        container.appendChild(step);
-
-        if (index < weeklyStatus.stepLabels.length - 1) {
-          const arrow = document.createElement('div');
-          arrow.className = 'workflow-arrow';
-          container.appendChild(arrow);
-        }
-      });
-    }
-
-    function renderRoles() {
-      const { roles } = dashboardData;
-      const container = document.getElementById('roleGrid');
-      container.innerHTML = '';
-
-      const roleOrder = ['mac', 'gpt', 'cc', 'ccw'];
-      const roleNames = { mac: 'Mac', gpt: 'GPT', cc: 'CC', ccw: 'CCW' };
-
-      roleOrder.forEach(roleKey => {
-        const role = roles[roleKey];
-        const card = document.createElement('div');
-        card.className = 'role-card';
-
-        const header = document.createElement('div');
-        header.className = 'role-header';
-
-        const name = document.createElement('div');
-        name.className = 'role-name';
-        name.textContent = roleNames[roleKey];
-
-        const badge = document.createElement('div');
-        badge.className = `role-badge ${role.status}`;
-        badge.textContent = role.status;
-
-        header.appendChild(name);
-        header.appendChild(badge);
-
-        const detail = document.createElement('div');
-        detail.className = 'role-detail';
-        detail.innerHTML = `
-          <label>Current Task</label>
-          <div class="role-detail-value">${role.currentTask || '(no task)'}</div>
-          <label>Last Active</label>
-          <div class="role-detail-value">${role.lastActive || '--'}</div>
-        `;
-
-        card.appendChild(header);
-        card.appendChild(detail);
-        container.appendChild(card);
-      });
-    }
-
-    function renderCandidates() {
-      const { candidates } = dashboardData;
-      const container = document.getElementById('candidatesTable');
-      const filterContainer = document.getElementById('themeFilters');
-
-      // Create filter buttons
-      filterContainer.innerHTML = '';
-      const themes = new Set(candidates.map(c => c.pool || c.theme).filter(t => t));
-      const allBtn = document.createElement('button');
-      allBtn.className = 'filter-btn active';
-      allBtn.textContent = 'All';
-      allBtn.onclick = () => {
-        document.querySelectorAll('#themeFilters .filter-btn').forEach(b => b.classList.remove('active'));
-        allBtn.classList.add('active');
-        renderCandidatesTable(candidates);
-      };
-      filterContainer.appendChild(allBtn);
-
-      themes.forEach(theme => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.textContent = theme;
-        btn.onclick = () => {
-          document.querySelectorAll('#themeFilters .filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const filtered = candidates.filter(c => (c.pool || c.theme) === theme);
-          renderCandidatesTable(filtered);
-        };
-        filterContainer.appendChild(btn);
-      });
-
-      renderCandidatesTable(candidates);
-    }
-
-    function renderCandidatesTable(candidates) {
-      const container = document.getElementById('candidatesTable');
-      if (candidates.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>目前尚無候選題庫</p></div>';
-        return;
-      }
-
-      const table = document.createElement('table');
-      table.innerHTML = `
+  <!-- 候選題庫 -->
+  <div class="sec">
+    <div class="sec-title">📋 候選題庫</div>
+    <div class="tbl-wrap">
+      <table>
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Source</th>
-            <th>Theme</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Added Date</th>
+            <th>標題</th>
+            <th>主題</th>
+            <th>優先</th>
+            <th>訊號摘要</th>
+            <th>狀態</th>
           </tr>
         </thead>
-        <tbody>
-          ${candidates.map(c => `
-            <tr>
-              <td>${escapeHtml(c.title)}</td>
-              <td style="max-width:200px;font-size:11px;">${escapeHtml(c.source)}</td>
-              <td><span class="theme-badge">${escapeHtml(c.pool || c.theme)}</span></td>
-              <td><span class="status-badge ${c.priority === 'high' ? 'review' : 'draft'}">${escapeHtml(c.priority)}</span></td>
-              <td><span class="status-badge ${c.status === 'drafted' ? 'published' : c.status === 'selected' ? 'review' : 'draft'}">${escapeHtml(c.status)}</span></td>
-              <td>${formatDate(c.addedDate)}</td>
-            </tr>
-          `).join('')}
+        <tbody id="cTbody">
+          <tr class="empty"><td colspan="5">尚無候選題庫資料</td></tr>
         </tbody>
-      `;
-      container.innerHTML = '';
-      container.appendChild(table);
-    }
+      </table>
+    </div>
+  </div>
 
-    function renderArticles() {
-      const { articles } = dashboardData;
-      const container = document.getElementById('articlesTable');
-
-      if (articles.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>目前尚無發布文章</p></div>';
-        return;
-      }
-
-      const statusClass = s => s === 'published' ? 'published' : s === 'review' ? 'review' : 'draft';
-
-      const table = document.createElement('table');
-      table.innerHTML = `
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Publish Date</th>
-            <th>Theme</th>
-            <th>Channel</th>
-            <th>Views</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${articles.map((a, i) => `
+  <!-- 文章列表（預設折疊） -->
+  <div class="sec">
+    <div class="col-hdr" onclick="tog('arts')">
+      <div class="sec-title">📝 文章列表</div>
+      <span class="col-btn" id="arts-btn">▼ 展開</span>
+    </div>
+    <div class="col-body closed" id="arts-body" style="max-height:2000px">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
             <tr>
-              <td>${escapeHtml(a.title)}</td>
-              <td>${formatDate(a.publishDate || a.createdDate)}</td>
-              <td><span class="theme-badge">${escapeHtml(a.theme)}</span></td>
-              <td>${escapeHtml(a.channel || a.biweekAxis || '--')}</td>
-              <td>${a.views || '0'}</td>
-              <td><span class="status-badge clickable ${statusClass(a.status)}" onclick="cycleArticleStatus(${i})" title="點擊切換狀態">${escapeHtml(a.status)}</span></td>
+              <th>建立日期</th>
+              <th>標題</th>
+              <th>主題</th>
+              <th>狀態</th>
+              <th>發布日期</th>
+              <th>連結</th>
             </tr>
-          `).join('')}
-        </tbody>
-      `;
-      container.innerHTML = '';
-      container.appendChild(table);
-    }
+          </thead>
+          <tbody id="aTbody">
+            <tr class="empty"><td colspan="6">尚無文章資料</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    function cycleArticleStatus(index) {
-      const cycle = ['draft', 'review', 'published'];
-      const article = dashboardData.articles[index];
-      const curr = cycle.indexOf(article.status);
-      article.status = cycle[(curr + 1) % cycle.length];
-      // Auto-fill publishDate when set to published
-      if (article.status === 'published' && !article.publishDate) {
-        article.publishDate = new Date().toISOString().slice(0, 10);
-      }
-      // Clear publishDate if reverted from published
-      if (article.status !== 'published') {
-        article.publishDate = '';
-      }
-      renderArticles();
-      renderKPI();
-      saveDataJson();
-      showToast(`「${article.title}」→ ${article.status}`);
-    }
+  <!-- 控場紀錄（預設折疊） -->
+  <div class="sec">
+    <div class="col-hdr" onclick="tog('log')">
+      <div class="sec-title">🗂 控場紀錄</div>
+      <span class="col-btn" id="log-btn">▼ 展開</span>
+    </div>
+    <div class="col-body closed" id="log-body" style="max-height:3000px">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>類型</th>
+              <th>執行摘要</th>
+              <th>燈號</th>
+            </tr>
+          </thead>
+          <tbody id="lTbody">
+            <tr class="empty"><td colspan="4">尚無控場紀錄</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    function renderControlLog() {
-      const { controlLog } = dashboardData;
-      const container = document.getElementById('controlLog');
+  <!-- ChatGPT 提示詞 -->
+  <div class="sec">
+    <div class="sec-title">💬 本週 ChatGPT 提示詞</div>
+    <div class="prompt-card">
+      <div class="prompt-hdr">
+        <span class="prompt-title">市場訊號摘要 + 討論提示詞</span>
+        <button class="copy-btn" id="copyBtn" onclick="doCopy()">複製提示詞</button>
+      </div>
+      <div id="promptBox">
+        <div class="prompt-empty">CCW 每週執行後，提示詞將自動出現在這裡</div>
+      </div>
+    </div>
+  </div>
 
-      if (controlLog.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>目前尚無控場紀錄</p></div>';
-        return;
-      }
+</div>
 
-      container.innerHTML = controlLog.map((entry, index) => `
-        <div class="timeline-item">
-          <div class="timeline-marker">${index + 1}</div>
-          <div class="timeline-content">
-            <div class="timeline-date">${formatDate(entry.date)}</div>
-            <div class="timeline-type">${escapeHtml(entry.type)}</div>
-            <div class="timeline-summary">${escapeHtml(entry.summary)}</div>
-          </div>
-        </div>
-      `).join('');
-    }
+<div class="footer">睦聚開發 · 內容引擎 · 由 CCW 自動維護 · 每週一、四更新</div>
 
-    function formatDate(dateStr) {
-      if (!dateStr || dateStr === '--') return '--';
-      try {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
-      } catch {
-        return dateStr;
-      }
-    }
+<script>
+/* ── 折疊 ── */
+const closed = {arts:true, log:true};
+function tog(id){
+  closed[id] = !closed[id];
+  document.getElementById(id+'-body').classList.toggle('closed', closed[id]);
+  document.getElementById(id+'-btn').textContent = closed[id] ? '▼ 展開' : '▲ 收合';
+}
 
-    function escapeHtml(text) {
-      if (!text) return '';
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      };
-      return text.replace(/[&<>"']/g, m => map[m]);
-    }
+/* ── Badge ── */
+function badgeCls(s){
+  return {new:'b-new',selected:'b-sel',rejected:'b-rej',draft:'b-dft',drafted:'b-dft',review:'b-rev',published:'b-pub'}[s]||'b-dft';
+}
+function badgeLbl(s){
+  return {new:'新增',selected:'已選',rejected:'未採用',draft:'草稿中',drafted:'草稿完成',review:'審稿中',published:'已發布'}[s]||s||'—';
+}
+function priCls(p){return {high:'p-hi',medium:'p-md',low:'p-lo'}[p]||'p-lo'}
+function priLbl(p){return {high:'高',medium:'中',low:'低'}[p]||p||'—'}
+function tlCls(l){return {green:'tl-g',yellow:'tl-y',red:'tl-r'}[l]||'tl-x'}
+function tlEmoji(l){return {green:'🟢',yellow:'🟡',red:'🔴'}[l]||'⚫'}
 
-    // ─── Search Strategy ───
-    function renderSearchStrategy() {
-      const strategy = dashboardData.searchStrategy || { directions: [], weeklyKeywords: [], sources: [] };
+/* ── 載入 data.json ── */
+fetch('data.json?t='+Date.now())
+  .then(r=>r.json())
+  .then(render)
+  .catch(()=>{ document.getElementById('ssTxt').textContent='⚠ 無法載入 data.json'; });
 
-      // Directions
-      const dirContainer = document.getElementById('strategyDirections');
-      dirContainer.innerHTML = strategy.directions.map(d => `
-        <div class="direction-card ${d.active ? 'active' : 'inactive'}">
-          <div class="direction-label">
-            <span class="direction-dot ${d.active ? 'on' : 'off'}"></span>
-            ${escapeHtml(d.label)}
-          </div>
-          <div class="direction-desc">${escapeHtml(d.desc)}</div>
-        </div>
-      `).join('');
+function render(d){
+  /* 最後更新 */
+  document.getElementById('lastUpdated').textContent = d.lastUpdated || d.project?.lastUpdated || '—';
 
-      // Keywords
-      renderKeywordTags(strategy.weeklyKeywords || []);
+  /* 本週狀態 */
+  const ws = d.weeklyStatus||{};
+  const light = ws.light || ws.trafficLight || d.project?.light;
+  document.getElementById('tlDot').className = 'tl '+tlCls(light);
+  const wk = ws.week || d.project?.currentWeek;
+  document.getElementById('swTxt').textContent = wk ? '第 '+wk+' 週' : '第 — 週';
+  document.getElementById('ssTxt').textContent = ws.notes || ws.summary || '—';
+  document.getElementById('stTxt').textContent = ws.biweekTheme || '';
 
-      // Sources
-      const sourceContainer = document.getElementById('sourceList');
-      sourceContainer.innerHTML = (strategy.sources || []).map(s =>
-        `<span class="source-chip">${escapeHtml(s)}</span>`
-      ).join('');
-    }
+  /* KPI */
+  const k = d.kpi||{};
+  document.getElementById('kpPub').textContent = k.totalArticles ?? k.publishedArticles ?? 0;
+  document.getElementById('kpTgt').textContent = d.project?.targetArticles ?? k.targetArticles ?? 8;
+  document.getElementById('kpWk').textContent  = k.consecutiveWeeks ?? 0;
+  document.getElementById('kpCo').textContent  = k.inquiries ?? k.consultations ?? 0;
+  document.getElementById('kpPa').textContent  = k.partnerInteractions ?? 0;
 
-    function renderKeywordTags(keywords) {
-      const container = document.getElementById('keywordTags');
-      if (keywords.length === 0) {
-        container.innerHTML = '<span style="font-size:12px;color:var(--text-muted);">尚未設定本週關鍵字</span>';
-        return;
-      }
-      container.innerHTML = keywords.map((kw, i) =>
-        `<span class="keyword-tag">${escapeHtml(kw)}<span class="remove-tag" onclick="removeKeyword(${i})">×</span></span>`
-      ).join('');
-    }
+  /* 搜尋策略 */
+  const st = d.searchStrategy||{};
+  document.getElementById('sAxis').textContent = ws.biweekTheme || st.dualWeekAxis || '—';
+  const dirs = (st.directions||[]).filter(x=>x.active).map(x=>x.label);
+  document.getElementById('sDirs').textContent = dirs.length ? dirs.join('、') : (st.directionTheme||'—');
+  const kws = st.weeklyKeywords || st.keywords || [];
+  const kwEl = document.getElementById('sKws');
+  kwEl.innerHTML = kws.length
+    ? kws.map(k=>`<span class="kw">${k}</span>`).join('')
+    : '<span style="color:var(--muted)">—</span>';
 
-    function initKeywordInput() {
-      const input = document.getElementById('keywordInput');
-      const btn = document.getElementById('addKeywordBtn');
-      if (!input || !btn) return;
+  /* 候選題庫 */
+  const ctb = document.getElementById('cTbody');
+  if(d.candidates && d.candidates.length){
+    ctb.innerHTML = d.candidates.map(c=>{
+      /* 標題：若有 url 就加連結 */
+      const titleHtml = c.url
+        ? `<a class="lnk" href="${c.url}" target="_blank" rel="noopener"><strong>${c.title}</strong></a>`
+        : `<strong style="color:#F1F5F9">${c.title}</strong>`;
+      /* 來源（文字 + 連結） */
+      const srcParts = [];
+      if(c.source) srcParts.push(`<span style="color:var(--muted);font-size:11px">${c.source}</span>`);
+      if(c.sourceUrl) srcParts.push(`<a class="lnk" href="${c.sourceUrl}" target="_blank" rel="noopener">📎 原文</a>`);
+      const srcHtml = srcParts.length ? `<div style="margin-top:5px">${srcParts.join(' ')}</div>` : '';
+      /* 訊號文字（截 80 字） */
+      const sig = (c.signal||c.source||'');
+      const sigShort = sig.length>80 ? sig.slice(0,80)+'…' : sig;
+      return `<tr>
+        <td>${titleHtml}${srcHtml}</td>
+        <td><span style="font-size:12px">${c.theme||c.category||'—'}</span></td>
+        <td><span class="badge ${priCls(c.priority)}">${priLbl(c.priority)}</span></td>
+        <td class="sig">${sigShort}</td>
+        <td><span class="badge ${badgeCls(c.status)}">${badgeLbl(c.status)}</span></td>
+      </tr>`;
+    }).join('');
+  }
 
-      function addKeyword() {
-        const val = input.value.trim();
-        if (!val) return;
-        if (!dashboardData.searchStrategy) {
-          dashboardData.searchStrategy = { directions: [], weeklyKeywords: [], sources: [] };
-        }
-        if (!dashboardData.searchStrategy.weeklyKeywords) {
-          dashboardData.searchStrategy.weeklyKeywords = [];
-        }
-        if (!dashboardData.searchStrategy.weeklyKeywords.includes(val)) {
-          dashboardData.searchStrategy.weeklyKeywords.push(val);
-          renderKeywordTags(dashboardData.searchStrategy.weeklyKeywords);
-          saveDataJson();
-        }
-        input.value = '';
-        input.focus();
-      }
+  /* 文章列表 */
+  const atb = document.getElementById('aTbody');
+  if(d.articles && d.articles.length){
+    atb.innerHTML = d.articles.map(a=>{
+      const link = a.publishUrl || a.docLink;
+      const linkHtml = link
+        ? `<a class="lnk" href="${link}" target="_blank" rel="noopener">📄 查看</a>`
+        : '<span style="color:var(--muted)">—</span>';
+      return `<tr>
+        <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">${a.createdDate||a.date||'—'}</td>
+        <td>${a.title||'—'}</td>
+        <td style="font-size:12px">${a.theme||a.category||'—'}</td>
+        <td><span class="badge ${badgeCls(a.status)}">${badgeLbl(a.status)}</span></td>
+        <td style="font-family:var(--mono);font-size:12px;color:var(--muted)">${a.publishDate||'—'}</td>
+        <td>${linkHtml}</td>
+      </tr>`;
+    }).join('');
+  }
 
-      btn.onclick = addKeyword;
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') addKeyword();
-      });
-    }
+  /* 控場紀錄 */
+  const ltb = document.getElementById('lTbody');
+  if(d.controlLog && d.controlLog.length){
+    ltb.innerHTML = [...d.controlLog].reverse().map(l=>`<tr>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap">${l.date||'—'}</td>
+      <td style="font-size:12px;white-space:nowrap">${l.type||'—'}</td>
+      <td style="font-size:13px">${l.summary||'—'}</td>
+      <td>${tlEmoji(l.light||l.trafficLight)}</td>
+    </tr>`).join('');
+  }
 
-    function removeKeyword(index) {
-      if (!dashboardData.searchStrategy || !dashboardData.searchStrategy.weeklyKeywords) return;
-      dashboardData.searchStrategy.weeklyKeywords.splice(index, 1);
-      renderKeywordTags(dashboardData.searchStrategy.weeklyKeywords);
-      saveDataJson();
-    }
+  /* ChatGPT 提示詞 */
+  const cp = d.chatgptPrompt||{};
+  if(cp.researchSummary||cp.prompt){
+    document.getElementById('promptBox').innerHTML =
+      (cp.researchSummary ? `<div class="prompt-sum">${cp.researchSummary}</div>` : '')+
+      (cp.prompt ? `<div class="prompt-body" id="promptText">${cp.prompt}</div>` : '');
+  }
+}
 
-    function saveDataJson() {
-      // Generate downloadable data.json for user to replace locally
-      const blob = new Blob([JSON.stringify(dashboardData, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'data.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('data.json 已下載，請替換專案目錄中的檔案');
-    }
-
-    // ─── Action Buttons ───
-    let currentPromptText = '';
-
-    function triggerAction(action) {
-      const actions = {
-        search: {
-          label: '搜尋市場訊號',
-          prompt: buildSearchPrompt()
-        },
-        organize: {
-          label: '整理候選題庫',
-          prompt: '讀取 內容引擎 專案記憶\n\n請幫我整理內容引擎的候選題庫：\n- 根據本週搜尋方向篩選候選題目\n- 依優先級排序（高/中/低）\n- 標記每題的主題分類\n- 建議本週最適合寫的 1-2 題\n\n輸出格式：更新 data.json 的 candidates 陣列。'
-        },
-        write: {
-          label: '產出文章草稿',
-          prompt: '讀取 內容引擎 專案記憶\n\n請從候選題庫中已選定的題目，產出一篇文章初稿。\n\n要求：\n- 維持「需求入口」定位，不要太像教學文\n- 審稿三問自檢：講太深？太像教學？維持需求入口定位？\n- 字數 800-1200 字\n- 結尾引導聯絡（睦聚開發）\n- 輸出 Markdown 格式'
-        },
-        progress: {
-          label: '進度追蹤報告',
-          prompt: '讀取 內容引擎 專案記憶\n\n請產出內容引擎本週進度追蹤報告：\n- 燈號判斷（綠/黃/紅）\n- KPI 更新（已發布/連續週數/諮詢數/同業互動）\n- 本週工作總結\n- 下週建議行動\n\n如果連 2 週未產出→黃燈，連 3 週→紅燈。'
-        }
-      };
-
-      const act = actions[action];
-      if (!act) return;
-
-      currentPromptText = act.prompt;
-      document.getElementById('promptTitle').textContent = act.label;
-      document.getElementById('promptText').textContent = act.prompt;
-      document.getElementById('promptNextStep').classList.remove('show');
-      const copyBtn = document.getElementById('promptCopyBtn');
-      copyBtn.textContent = '複製提示詞';
-      copyBtn.classList.remove('copied');
-      document.getElementById('promptOverlay').classList.add('show');
-    }
-
-    function copyPrompt() {
-      const copyBtn = document.getElementById('promptCopyBtn');
-      navigator.clipboard.writeText(currentPromptText).then(() => {
-        copyBtn.textContent = '已複製';
-        copyBtn.classList.add('copied');
-        document.getElementById('promptNextStep').classList.add('show');
-      }).catch(() => {
-        // Fallback: select text
-        const range = document.createRange();
-        range.selectNodeContents(document.getElementById('promptText'));
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        copyBtn.textContent = '請手動 Cmd+C 複製';
-      });
-    }
-
-    function closePromptPanel() {
-      document.getElementById('promptOverlay').classList.remove('show');
-    }
-
-    function buildSearchPrompt() {
-      const strategy = dashboardData.searchStrategy || {};
-      const keywords = (strategy.weeklyKeywords || []).join('、');
-      const activeDirections = (strategy.directions || []).filter(d => d.active).map(d => d.label).join('、');
-      const sources = (strategy.sources || []).join('、');
-
-      let prompt = '讀取 內容引擎 專案記憶\n\n';
-      prompt += '本週搜尋任務：\n';
-      if (activeDirections) prompt += `- 方向：${activeDirections}\n`;
-      if (keywords) prompt += `- 關鍵字/大方向：${keywords}\n`;
-      if (sources) prompt += `- 資料來源：${sources}\n`;
-      prompt += '\n請搜尋市場訊號，整理成候選題庫格式（title/source/theme/priority/status）。';
-      return prompt;
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('actionToast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 4000);
-    }
-
-    // Initialize
-    loadData();
-  </script>
+/* ── 複製提示詞 ── */
+function doCopy(){
+  const el = document.getElementById('promptText');
+  if(!el) return;
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    btn.textContent='✓ 已複製'; btn.classList.add('ok');
+    setTimeout(()=>{ btn.textContent='複製提示詞'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+</script>
 </body>
 </html>
