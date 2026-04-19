@@ -131,12 +131,6 @@ a.lnk:hover{opacity:1;text-decoration:underline}
 .art-links{display:flex;gap:10px;flex-wrap:wrap}
 .art-links a{font-size:11px}
 
-/* ── 匯出按鈕 ── */
-.export-bar{display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px}
-.export-btn{background:rgba(251,191,36,.12);color:var(--gold);border:1px solid rgba(251,191,36,.3);border-radius:4px;padding:6px 14px;font-size:12px;font-family:var(--mono);cursor:pointer}
-.export-btn:hover{background:rgba(251,191,36,.22)}
-.export-btn.ok{color:var(--green);border-color:var(--green);background:rgba(74,222,128,.1)}
-
 /* ── 狀態 badge 擴充 ── */
 .b-comp{background:rgba(96,165,250,.12);color:var(--blue)}
 .b-fb{background:rgba(66,103,178,.15);color:#8B9DC3}
@@ -257,9 +251,6 @@ a.lnk:hover{opacity:1;text-decoration:underline}
       <span class="col-btn" id="arts-btn">▲ 收合</span>
     </div>
     <div class="col-body" id="arts-body" style="max-height:5000px">
-      <div class="export-bar">
-        <button class="export-btn" onclick="exportJson()" id="exportBtn">📦 匯出 data.json</button>
-      </div>
       <div class="tbl-wrap">
         <table>
           <thead>
@@ -531,38 +522,8 @@ function saveArticle(idx){
     a.publishDate = new Date().toISOString().slice(0,10);
   }
 
-  window._dirty = true;
   openEdit = -1;
   renderArticles(window._data);
-
-  /* 更新匯出按鈕提示 */
-  const btn = document.getElementById('exportBtn');
-  btn.textContent = '📦 匯出 data.json（有未儲存的變更）';
-  btn.style.borderColor = 'var(--gold)';
-}
-
-/* ── 匯出 data.json ── */
-function exportJson(){
-  if(!window._data) return;
-  const d = window._data;
-  d.lastUpdated = new Date().toISOString().slice(0,10);
-  const blob = new Blob([JSON.stringify(d,null,2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'data.json';
-  link.click();
-  URL.revokeObjectURL(url);
-
-  const btn = document.getElementById('exportBtn');
-  btn.textContent = '✓ 已匯出';
-  btn.classList.add('ok');
-  window._dirty = false;
-  setTimeout(()=>{
-    btn.textContent = '📦 匯出 data.json';
-    btn.classList.remove('ok');
-    btn.style.borderColor = '';
-  }, 3000);
 }
 </script>
 </body>
