@@ -400,9 +400,9 @@ function render(d){
     }).join('');
   }
 
-  /* 文章列表（含編輯面板） */
+  /* 文章列表（含編輯面板） — 從 localStorage 還原編輯 */
+  applyLocalEdits(d);
   window._data = d;
-  window._dirty = false;
   renderArticles(d);
 
   /* 控場紀錄 */
@@ -507,6 +507,39 @@ function toggleEdit(idx){
   renderArticles(window._data);
 }
 
+/* ── localStorage 持久化 ── */
+const LS_KEY = 'ce_article_edits';
+
+function getLocalEdits(){
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+
+function applyLocalEdits(d){
+  const edits = getLocalEdits();
+  (d.articles||[]).forEach(a=>{
+    const e = edits[a.title];
+    if(!e) return;
+    if(e.status) a.status = e.status;
+    if(e.facebookUrl) a.facebookUrl = e.facebookUrl;
+    if(e.websiteUrl) a.websiteUrl = e.websiteUrl;
+    if(e.content) a.content = e.content;
+    if(e.publishDate) a.publishDate = e.publishDate;
+  });
+}
+
+function saveLocalEdit(a){
+  const edits = getLocalEdits();
+  edits[a.title] = {
+    status: a.status,
+    facebookUrl: a.facebookUrl || '',
+    websiteUrl: a.websiteUrl || '',
+    content: a.content || '',
+    publishDate: a.publishDate || ''
+  };
+  localStorage.setItem(LS_KEY, JSON.stringify(edits));
+}
+
 function saveArticle(idx){
   const a = window._data.articles[idx];
   const newStatus = document.getElementById('sel-'+idx).value;
@@ -520,10 +553,11 @@ function saveArticle(idx){
   if(newContent) a.content = newContent;
 
   /* 自動填發布日期 */
-  if((newStatus==='fb_published'||newStatus==='web_published'||newStatus==='completed') && !a.publishDate){
+  if((newStatus==='fb_published'||newStatus==='web_published'||newStatus==='completed'||newStatus==='all_published') && !a.publishDate){
     a.publishDate = new Date().toISOString().slice(0,10);
   }
 
+  saveLocalEdit(a);
   openEdit = -1;
   renderArticles(window._data);
 }
