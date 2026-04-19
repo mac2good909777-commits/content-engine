@@ -199,9 +199,12 @@
       "publishDate": "2026-04-19",
       "theme": "需求訊號",
       "biweekAxis": "需求動態",
-      "status": "published",
+      "status": "completed",
       "draftFile": "drafts/c001_full_package.md",
-      "publishUrl": "https://mac2good909777-commits.github.io/content-engine/drafts/c001_full_package.md"
+      "publishUrl": "https://mac2good909777-commits.github.io/content-engine/drafts/c001_full_package.md",
+      "facebookUrl": "",
+      "websiteUrl": "",
+      "content": ""
     },
     {
       "title": "手上那間老廠房，繼續放著、改建、還是賣掉？三條路的隱藏門檻",
@@ -209,9 +212,12 @@
       "publishDate": "2026-04-19",
       "theme": "協作解題",
       "biweekAxis": "資產解題",
-      "status": "published",
+      "status": "completed",
       "draftFile": "drafts/c008_full_package.md",
-      "publishUrl": "https://mac2good909777-commits.github.io/content-engine/drafts/c008_full_package.md"
+      "publishUrl": "https://mac2good909777-commits.github.io/content-engine/drafts/c008_full_package.md",
+      "facebookUrl": "",
+      "websiteUrl": "",
+      "content": ""
     }
   ],
   "kpi": {
