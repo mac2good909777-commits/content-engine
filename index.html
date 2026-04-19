@@ -135,6 +135,7 @@ a.lnk:hover{opacity:1;text-decoration:underline}
 .b-comp{background:rgba(96,165,250,.12);color:var(--blue)}
 .b-fb{background:rgba(66,103,178,.15);color:#8B9DC3}
 .b-web{background:rgba(74,222,128,.12);color:var(--green)}
+.b-all{background:rgba(251,191,36,.15);color:var(--gold);border:1px solid rgba(251,191,36,.3)}
 
 /* ── 頁尾 ── */
 .footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;font-family:var(--mono);border-top:1px solid var(--bdr);margin-top:32px}
@@ -325,10 +326,10 @@ function tog(id){
 
 /* ── Badge ── */
 function badgeCls(s){
-  return {new:'b-new',selected:'b-sel',rejected:'b-rej',draft:'b-dft',drafted:'b-dft',review:'b-rev',published:'b-pub',completed:'b-comp',fb_published:'b-fb',web_published:'b-web'}[s]||'b-dft';
+  return {new:'b-new',selected:'b-sel',rejected:'b-rej',draft:'b-dft',drafted:'b-dft',review:'b-rev',published:'b-pub',completed:'b-comp',fb_published:'b-fb',web_published:'b-web',all_published:'b-all'}[s]||'b-dft';
 }
 function badgeLbl(s){
-  return {new:'新增',selected:'已選',rejected:'未採用',draft:'草稿',drafted:'草稿完成',review:'審稿中',published:'已發布',completed:'文章已完成',fb_published:'臉書已發佈',web_published:'網站已發佈'}[s]||s||'—';
+  return {new:'新增',selected:'已選',rejected:'未採用',draft:'草稿',drafted:'草稿完成',review:'審稿中',published:'已發布',completed:'文章已完成',fb_published:'臉書已發佈',web_published:'網站已發佈',all_published:'全平台已發佈'}[s]||s||'—';
 }
 function priCls(p){return {high:'p-hi',medium:'p-md',low:'p-lo'}[p]||'p-lo'}
 function priLbl(p){return {high:'高',medium:'中',low:'低'}[p]||p||'—'}
@@ -440,7 +441,8 @@ const STATUS_OPTIONS = [
   {value:'draft',label:'草稿'},
   {value:'completed',label:'完整文章已完成'},
   {value:'fb_published',label:'臉書已發佈'},
-  {value:'web_published',label:'睦聚網站已發佈'}
+  {value:'web_published',label:'睦聚網站已發佈'},
+  {value:'all_published',label:'全平台已發佈'}
 ];
 let openEdit = -1;
 
