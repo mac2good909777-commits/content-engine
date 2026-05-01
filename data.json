@@ -11,32 +11,24 @@
     "phase": "Phase 1",
     "light": "green",
     "targetArticles": 8,
-    "principle": "Costco 模式：少而準，長期建立信任"
+    "principle": "Costco 模式：少而準，長期建立信任",
+    "lastUpdated": "2026-04-20"
   },
   "lastUpdated": "2026-04-19",
   "weeklyStatus": {
-    "currentStep": 2,
-    "biweekTheme": "資產解題",
-    "notes": "Week 2 完成。c001 + c008 審稿通過並發布（2026-04-19）。文末格式統一為新版。deploy.py 已修復（補上 drafts/ git add）。"
+    "week": 2,
+    "startDate": "2026-04-20",
+    "trafficLight": "green",
+    "summary": "週一執行：掃描18篇，選出5個候選，2篇草稿完成"
   },
   "searchStrategy": {
-    "directions": [
-      { "label": "需求訊號", "desc": "客戶常問的問題、市場上反覆出現的需求模式", "active": true },
-      { "label": "產業觀察", "desc": "產業園區動態、重大投資案、政策變化", "active": true },
-      { "label": "風險提醒", "desc": "常見交易陷阱、法規變更、市場風險", "active": true },
-      { "label": "協作解題", "desc": "跨專業合作案例、仲介實務解法", "active": true },
-      { "label": "案例故事", "desc": "成功案例改寫、匿名情境分享", "active": false }
+    "dualWeekAxis": "資產解題",
+    "keywords": [
+      "台中工業區立體化＋廠房資產增值",
+      "AI半導體＋廠房需求分化＋以買代建",
+      "台中科技廊道2.0＋矽品擴廠＋產業聚落"
     ],
-    "weeklyKeywords": ["老廠房活化", "工業區立體化", "廠房繼承", "資產活化", "廠房持有vs出售"],
-    "sources": [
-      "591 廠房/土地近期刊登趨勢",
-      "Google Trends 工業地產相關",
-      "內政部/經濟部近期公告",
-      "同業社群討論熱點",
-      "行政院工業區立體化方案",
-      "財政部稅務入口網",
-      "JLL/CBRE 季度報告"
-    ]
+    "directionTheme": "你的廠房在這波科技浪潮中值多少？——資產重估與解題策略"
   },
   "candidates": [
     {
@@ -190,6 +182,66 @@
       "signal": "倉儲物流業佔廠房需求20%最高，但諮詢轉換潛力低",
       "angle": "帶出廠房需求多元化認識",
       "ccwNote": "轉社群短內容素材，不適合長文。"
+    },
+    {
+      "date": "2026-04-18",
+      "title": "台中工業區立體化政策與科技鏈雙動能帶動資產飛躍",
+      "source": "方格子 vocus",
+      "url": "https://vocus.cc/article/698e96bffd89780001c6d6ad",
+      "signalStrength": 5,
+      "category": "產業觀察",
+      "status": "selected",
+      "summary": "台中工業區立體化已核准13件，地價5年漲5成，容積獎勵最高20%",
+      "bizInsight": "廠房業主可透過立體化方案將老廠房增值，直接影響買賣決策",
+      "note": "與本週資產解題主軸高度吻合"
+    },
+    {
+      "date": "2026-04-15",
+      "title": "廠房交易創新高，辦公市場卻熄火？AI撐起工業地產",
+      "source": "TechNews 科技新報",
+      "url": "https://finance.technews.tw/2026/01/25/taiwan-commercial-real-estate-market",
+      "signalStrength": 5,
+      "category": "需求訊號",
+      "status": "selected",
+      "summary": "2025年廠房交易686億創新高，AI佔44%，科技業以買代建策略推升二手廠價",
+      "bizInsight": "AI供應鏈搶廠房，具備高規格機電的老廠房成為搶手戰略物資",
+      "note": "直接支撐資產重估論述"
+    },
+    {
+      "date": "2026-04-10",
+      "title": "台中科技廊道2.0——6000名就業人口帶動強勁需求",
+      "source": "經濟日報",
+      "url": "https://money.udn.com/money/story/5621/9427585",
+      "signalStrength": 4,
+      "category": "需求訊號",
+      "status": "new",
+      "summary": "矽品擴廠徵5000人，潭子聚興園區22家進駐，北台中科技廊道成形",
+      "bizInsight": "科技廊道沿線廠房需求將持續攀升，周邊工業用地價值看漲",
+      "note": "地點明確，適合後續獨立成篇"
+    },
+    {
+      "date": "2026-04-08",
+      "title": "鴻勁精密擴大投資8.5億元，立體化設廠強化AI供應鏈",
+      "source": "報新聞 Mega News",
+      "url": "https://www.contentplatform.info/articles/448432/",
+      "signalStrength": 4,
+      "category": "案例故事",
+      "status": "new",
+      "summary": "半導體測試設備商透過立體化方案在台中擴廠8.5億，回應AI訂單需求",
+      "bizInsight": "立體化不只是政策口號，已有具體案例落地，業主可參考",
+      "note": "可作為案例故事素材"
+    },
+    {
+      "date": "2026-04-05",
+      "title": "2026房市配置轉向商務剛需——資金逃離住宅重稅區鎖定微型總部",
+      "source": "富比士地產王",
+      "url": "https://www.fbs168.com/news/10303-2026-commercial-real-estate-shift",
+      "signalStrength": 3,
+      "category": "風險提醒",
+      "status": "new",
+      "summary": "住宅市場量縮，資金轉向廠辦與微型總部，商用不動產成新顯學",
+      "bizInsight": "持有廠房的業主可思考是否轉型為廠辦出租，提升資產報酬",
+      "note": "風險提醒角度：持有不動就是機會成本"
     }
   ],
   "articles": [
@@ -218,20 +270,50 @@
       "facebookUrl": "",
       "websiteUrl": "",
       "content": ""
+    },
+    {
+      "title": "台中工業區廠房一個月易主 20 件——關稅大洗牌，你的資產站在哪一邊？",
+      "date": "2026-04-27",
+      "status": "draft",
+      "theme": "市場觀察",
+      "draftFile": "drafts/c001_full_package.md"
+    },
+    {
+      "date": "2026-04-20",
+      "title": "你的廠房，在AI時代值多少？三個訊號幫你重新算",
+      "status": "draft",
+      "docLink": "",
+      "category": "產業觀察",
+      "note": "資產解題主軸，600-800字草稿完成"
     }
   ],
   "kpi": {
-    "totalArticles": 2,
-    "targetArticles": 8,
-    "consecutiveWeeks": 2,
-    "inquiries": 0,
+    "publishedArticles": 0,
+    "consecutiveWeeks": 4,
+    "consultations": 0,
     "partnerInteractions": 0
   },
   "roles": {
-    "mac": { "status": "active", "currentTask": "審稿完成，c001+c008 已發布", "lastActive": "2026-04-19" },
-    "gpt": { "status": "idle", "currentTask": "", "lastActive": "" },
-    "cc": { "status": "idle", "currentTask": "", "lastActive": "" },
-    "ccw": { "status": "active", "currentTask": "c001+c008 已發布，等待 Week 3 進料", "lastActive": "2026-04-19" }
+    "mac": {
+      "status": "active",
+      "currentTask": "審稿完成，c001+c008 已發布",
+      "lastActive": "2026-04-19"
+    },
+    "gpt": {
+      "status": "idle",
+      "currentTask": "",
+      "lastActive": ""
+    },
+    "cc": {
+      "status": "idle",
+      "currentTask": "",
+      "lastActive": ""
+    },
+    "ccw": {
+      "status": "active",
+      "currentTask": "c001+c008 已發布，等待 Week 3 進料",
+      "lastActive": "2026-04-19"
+    }
   },
   "controlLog": [
     {
@@ -282,10 +364,23 @@
       "light": "green",
       "summary": "【Week 2 草稿產出】c008「老廠房三條路」（協作解題/HIGH）。網站版約 870 字 + 臉書版約 310 字。審稿五問全數 PASS。待 Mac 審稿。",
       "agent": "CCW"
+    },
+    {
+      "date": "2026-04-27",
+      "type": "monday-full",
+      "light": "green",
+      "summary": "W4 完成。市場熱度掃描→3方向深度搜尋（15+輪）→7題候選→1篇完整草稿（c001 關稅大洗牌）。核心訊號：台中工業區廠房易主暴增+科技業Q1砸836億搶廠房，冰火兩重天。"
+    },
+    {
+      "date": "2026-04-30",
+      "type": "週四",
+      "summary": "Week 3 週四追蹤。黃燈：連 2 週無新草稿確認。c001/c008 待審稿。Spreadsheet 無法存取，需確認權限。",
+      "trafficLight": "yellow",
+      "note": "Google Spreadsheet ID 1KflbkG8pr1BIhR8_hXcFSCbZdWv-iGPsutNEVV8Ptoc 透過 Google Drive connector 回傳 Item not found，導致無法讀取即時資料。燈號判斷依據專案記憶文件（04/18 版本）。已補搜 4 篇市場訊號作為下週備料。"
     }
   ],
   "chatgptPrompt": {
-    "researchSummary": "Week 2 主題：資產解題。c008 老廠房三條路（持有/活化/脫手），草稿已完成。訊號來源：立體化方案、昆兆益案例、租金報酬率、土增稅減徵。",
-    "prompt": ""
+    "researchSummary": "來源列表：\n1. 台中工業區立體化政策與科技鏈雙動能 (vocus) https://vocus.cc/article/698e96bffd89780001c6d6ad\n2. 廠房交易創新高 AI撐起工業地產 (TechNews) https://finance.technews.tw/2026/01/25/taiwan-commercial-real-estate-market\n3. 台中科技廊道2.0 6000就業人口 (經濟日報) https://money.udn.com/money/story/5621/9427585\n4. 鴻勁精密擴大投資8.5億 (報新聞) https://www.contentplatform.info/articles/448432/\n5. 矽品擴廠狂徵5000人 (自由時報) https://estate.ltn.com.tw/article/27488\n6. 2026房市配置轉向商務剛需 (富比士) https://www.fbs168.com/news/10303-2026-commercial-real-estate-shift\n7. CBRE：2026工業地產續為投資亮點 (鉅亨網) https://news.cnyes.com/news/id/6271457\n8. 台中市穩坐製造業之都 (vocus) https://vocus.cc/article/699afa21fd897800017e5c38\n9. 2026房市觀測：Nvidia星艦效應點燃商辦 (遠雄) https://www.farglory-realty.com.tw/life-proposal/expert_peizhen_2026-q1-market/\n10. 台中工業區三面臨路廠房標售 每坪36.8萬 (經濟日報) https://money.udn.com/money/story/5638/8147816\n11. 商用不動產躍升營建業2026主流收益 (鉅亨網) https://news.cnyes.com/news/id/6413016\n12. 潭子聚興產業園區進駐廠商加速建廠 (經濟日報) https://money.udn.com/money/story/5612/8258907\n13. 蘆竹南崁廠房租金行情表 (rtube) https://www.rtube.com.tw/articles/2161\n14. 工業區廠房立體化中市首家完工啟用 (焦點時報) https://focus.586.com.tw/2024/07/17/p315420/\n15. 大立光美光都選台中工業地產黃金十年 (詠騰) https://www.ytyut.com/modules/news/article.php?storyid=5816\n16. 2026年國際房地產結構性分化 (GlobalG) https://www.globalg.com.tw/article/132\n17. 經濟部製造業最低工資補貼 (經濟部Threads) https://www.threads.com/@moeanews/post/DTAH_z0AUXx/\n18. 產業白皮書2026 (TCSCRE) https://www.tcscre.org/2026whitepaper",
+    "prompt": "---\n【本週工業不動產市場訊號｜睦聚開發 內容引擎】\n日期：2026-04-20 | 主軸：資產解題 | 方向：你的廠房在這波科技浪潮中值多少？\n\n訊號一：台中工業區立體化——已核准13件，地價5年漲5成（vocus）\nhttps://vocus.cc/article/698e96bffd89780001c6d6ad\n→ 廠房業主可透過立體化方案獲得最高20%容積獎勵，老廠房不再只是折舊資產，而是可增值的戰略資源。\n\n訊號二：廠房交易686億創新高，AI佔44%（TechNews）\nhttps://finance.technews.tw/2026/01/25/taiwan-commercial-real-estate-market\n→ 科技業「以買代建」策略推升二手廠價，具備高規格機電的老廠房成為搶手戰略物資，傳產業主手中的資產可能被低估。\n\n訊號三：台中科技廊道2.0成形——矽品徵5000人、聚興園區22家進駐（經濟日報）\nhttps://money.udn.com/money/story/5621/9427585\n→ 北台中后里-大雅-潭子沿線科技廊道帶動6000就業人口，周邊廠房租售需求持續攀升。\n\n【本週討論方向】\n請根據以上訊號：\n1. 哪個最值得寫成文章？理由？\n2. 建議3個「需求入口」定位的標題\n3. 應從哪個讀者的需求場景切入？\n---"
   }
 }
